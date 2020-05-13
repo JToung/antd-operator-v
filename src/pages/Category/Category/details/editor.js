@@ -36,6 +36,9 @@ const { Column, ColumnGroup } = Table;
 @Form.create()
 class Editor extends PureComponent {
 
+  state = {
+    category1:{}
+  }
   componentDidMount() {
     const { dispatch, match, category } = this.props;
     const { params } = match;
@@ -66,6 +69,8 @@ class Editor extends PureComponent {
     dispatch({
       type: 'category/fetchCategory',
       payload: params1,
+    }).then(res => {
+      this.setState({category1:res.res[0]})
     });
   }
 
@@ -74,9 +79,15 @@ class Editor extends PureComponent {
     const { params } = match;
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
+      const {category1} = this.state;
+      console.log('category1',category1)
       const payload = {
         ...values,
-        categoryReviseTime: new Date(),
+        categoryAddTime: category1.categoryAddTime,
+        categoryExamineTF: category1.categoryExamineTF,
+        categoryOperator: category1.categoryOperator,
+        categoryReviseTime: new Date().getTime(),
+        _id: this.props.match.params._id,
         id: this.props.match.params._id,
       };
 
@@ -95,11 +106,11 @@ class Editor extends PureComponent {
         payload,
       }).then(res => {
         console.log('res', res);
-        if (res != null) {
-          message.success('申请编辑成功！');
+        if (res.status != '0') {
+          message.success(res.information);
           this.props.history.push('/category/list');
         } else {
-          message.error('申请编辑失败，请重试!');
+          message.error(res.information);
         }
       });
     });
@@ -134,7 +145,9 @@ class Editor extends PureComponent {
                 </Form.Item>
               </Col>
               <Col lg={12} md={12} sm={24}>
-                <Form.Item label="品类包状态">{this.onOperatorState(category.data.res[0].categoryState)}</Form.Item>
+                <Form.Item label="品类包状态">
+                  {this.onOperatorState(category.data.res[0].categoryState)}
+                </Form.Item>
               </Col>
             </Row>
             <Row gutter={16}>
@@ -342,8 +355,8 @@ class Editor extends PureComponent {
             </Row>
           </div>
         );
-      }else{
-        return <div></div>
+      } else {
+        return <div />;
       }
     }
   }

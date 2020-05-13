@@ -961,7 +961,7 @@ class EditorItem extends PureComponent {
     this.props.form.validateFields((err, values) => {
       const payload = {
         ...values,
-        itemAddTime: new Date(),
+        itemAddTime: new Date().getTime(),
         operatorID: localStorage.getItem('userId'),
         itemState: '0',
         itemExamineTF: '0',

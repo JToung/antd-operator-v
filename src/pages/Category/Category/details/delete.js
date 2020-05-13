@@ -114,7 +114,7 @@ class Delete extends PureComponent {
           categoryMaxTaskTime: res1.categoryMaxTaskTime,
           categoryMinPrice: res1.categoryMinPrice,
           categoryMaxPrice: res1.categoryMaxPrice,
-          categoryDeleteTime: new Date(),
+          categoryDeleteTime: new Date().getTime(),
           id: this.props.match.params._id,
         };
         console.log('参数', payload);
@@ -123,11 +123,11 @@ class Delete extends PureComponent {
           payload,
         }).then(res => {
           console.log('res', res);
-          if (res != null) {
-            message.success('申请删除成功！');
+          if (res.status != '0') {
+            message.success(res.information);
             this.props.history.push('/category/list');
           } else {
-            message.error('申请删除失败，请重试!');
+            message.error(res.information);
           }
         });
       });

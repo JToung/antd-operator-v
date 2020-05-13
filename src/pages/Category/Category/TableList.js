@@ -146,37 +146,6 @@ class TableList extends PureComponent {
     });
   }
 
-  handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const { dispatch } = this.props;
-    const { formValues } = this.state;
-
-    const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      console.log('key', key);
-      const newObj = { ...obj };
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
-
-    const params = {
-      currentPage: pagination.current,
-      pageSize: pagination.pageSize,
-      categoryOperator: localStorage.getItem('userId'),
-      ...formValues,
-      ...filters,
-    };
-    if (sorter.field) {
-      params.sorter = `${sorter.field}_${sorter.order}`;
-    }
-
-    // dispatch({
-    //   type: 'rule/fetch',
-    //   payload: params,
-    // });
-    dispatch({
-      type: 'category/fetchCategory',
-      payload: params,
-    });
-  };
 
   handleFormReset = () => {
     const { form, dispatch } = this.props;
@@ -315,7 +284,6 @@ class TableList extends PureComponent {
               dataSource={this.queryDate(category)}
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
-              onChange={this.handleStandardTableChange}
             />
             {console.log('categoryList', category.data.res)}
           </div>

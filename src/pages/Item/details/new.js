@@ -459,7 +459,9 @@ class NewItem extends PureComponent {
     }
     const payload = {
       categoryOperator: localStorage.getItem('userId'),
+      categoryState: '1',
     };
+    //选择已上架的品类
     dispatch({
       type: 'category/fetchCategory',
       payload,
@@ -935,7 +937,7 @@ class NewItem extends PureComponent {
     this.props.form.validateFields((err, values) => {
       const payload = {
         ...values,
-        itemAddTime: new Date(),
+        itemAddTime: new Date().getTime(),
         operatorID: localStorage.getItem('userId'),
         itemState: '0',
         itemExamineTF: '0',
