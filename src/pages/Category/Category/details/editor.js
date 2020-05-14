@@ -87,6 +87,7 @@ class Editor extends PureComponent {
         categoryExamineTF: category1.categoryExamineTF,
         categoryOperator: category1.categoryOperator,
         categoryReviseTime: new Date().getTime(),
+        object:"c",
         _id: this.props.match.params._id,
         id: this.props.match.params._id,
       };

@@ -60,7 +60,7 @@ class View extends PureComponent {
     // console.log('operator.date',operator);
     if (category.data.res == null) {
       this.props.history.push('/category/list');
-    } else if (category.data.res != null) {
+    } else{
       return (
         // 加头部
         <PageHeaderWrapper title={<FormattedMessage id="app.categoty.basic.title" />}>

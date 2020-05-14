@@ -115,6 +115,7 @@ class Delete extends PureComponent {
           categoryMinPrice: res1.categoryMinPrice,
           categoryMaxPrice: res1.categoryMaxPrice,
           categoryDeleteTime: new Date().getTime(),
+          object:"c",
           id: this.props.match.params._id,
         };
         console.log('参数', payload);

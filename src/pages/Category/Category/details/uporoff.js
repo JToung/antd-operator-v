@@ -90,6 +90,7 @@ class UPOROFF extends PureComponent {
           categoryMaxPrice: res1.categoryMaxPrice,
           categoryDeleteTime: new Date().getTime(),
           id: this.props.match.params._id,
+          object:"c",
         };
         console.log('参数', payload);
         dispatch({

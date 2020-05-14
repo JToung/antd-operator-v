@@ -31,6 +31,7 @@ export default {
   'app.item.list.title': '服务单品包列表',
   'app.label.list.title': '服务品类标签列表',
   'app.messages.list.title': '消息列表',
+  'app.messages.basic.title': '消息管理',
   ...analysis,
   ...exception,
   ...form,

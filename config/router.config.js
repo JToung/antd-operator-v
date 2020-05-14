@@ -154,7 +154,7 @@ export default [
         path: '/messages',
         name: 'messages',
         icon: 'profile',
-        component: './Messages/messages',
+        component: './Messages',
         hideChildrenInMenu: true,
         routes: [
           {
@@ -165,6 +165,11 @@ export default [
             path: '/messages/info',
             name: 'info',
             component: './Messages/messages',
+          },
+          {
+            path: '/messages/view/:_id',
+            name: 'view',
+            component: './Messages/details/view',
           },
         ],
       },

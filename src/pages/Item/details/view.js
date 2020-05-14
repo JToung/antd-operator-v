@@ -304,6 +304,8 @@ class ViewItem extends PureComponent {
       }
     } else if (Item[0] != null) {
       return <div>{this.re()}</div>;
+    }else {
+      return <div></div>;
     }
   }
 }
