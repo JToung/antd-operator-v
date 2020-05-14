@@ -30,6 +30,7 @@ export default {
   'app.categoty.list.title': '服务品类包列表',
   'app.item.list.title': '服务单品包列表',
   'app.workorder.list.title': '工单列表',
+  'app.workorder.assign.title': '工单派单',
   'app.servicer.list.title': '专才列表',
   'app.label.list.title': '服务品类标签列表',
   'app.messages.list.title': '消息列表',

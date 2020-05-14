@@ -31,6 +31,7 @@ export default {
   'menu.workorder.info': '工单数据分析',
   'menu.workorder.list': '工单列表',
   'menu.workorder.view-workorder': '工单信息',
+  'menu.workorder.assign-workorder': '工单派单',
   'menu.servicer.home': '专才数据管理',
   'menu.servicer.info': '专才数据分析',
   'menu.servicer.list': '专才列表',

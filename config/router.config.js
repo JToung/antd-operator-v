@@ -176,6 +176,11 @@ export default [
             name: 'view-workorder',
             component: './Workorder/details/view',
           },
+          {
+            path: '/workorder/assign-workorder/:_id',
+            name: 'assign-workorder',
+            component: './Workorder/details/assign',
+          },
         ],
       },
       {

@@ -107,7 +107,7 @@ class TableListWorkorder extends PureComponent {
 
   initialValue(val) {
     if (val.state == '2') {
-      return <Link to={`/item/uporoff-item/${val._id}`}>派单</Link>;
+      return <Link to={`/workorder/assign-workorder/${val._id}`}>派单</Link>;
     } else {
       return <Link disabled>已派单</Link>;
     }

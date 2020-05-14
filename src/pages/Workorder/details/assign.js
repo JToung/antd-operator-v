@@ -11,11 +11,6 @@ import {
   Select,
   Icon,
   Button,
-  Dropdown,
-  Menu,
-  InputNumber,
-  DatePicker,
-  Modal,
   message,
   Badge,
   Divider,
@@ -26,6 +21,7 @@ import {
 // import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import memoryUtils from '@/utils/memoryUtils';
+import { FormattedMessage } from 'umi-plugin-react/locale';
 
 import styles from './TableList.less';
 
@@ -48,7 +44,7 @@ const status = ['结束', '进行中', '待分配', '用户终止', '等待启�
   //model
 }))
 @Form.create()
-class TableListWorkorder extends PureComponent {
+class TableListAssign extends PureComponent {
   state = {
     modalVisible: false,
     updateModalVisible: false,
@@ -56,39 +52,36 @@ class TableListWorkorder extends PureComponent {
     selectedRows: [],
     formValues: {},
     stepFormValues: {},
-    Workorder: [],
+    //合适专才列表
+    candidates: [],
   };
 
   columns = [
     {
-      title: '工单ID',
+      title: '专才ID',
       dataIndex: '_id',
       key: '_id',
     },
     {
-      title: '工单名称',
-      dataIndex: 'name',
-      key: 'name',
+      title: '专才名称',
+      dataIndex: 'servicerName',
+      key: 'servicerName',
     },
     {
-      title: '工单启动时间',
-      dataIndex: 'startTime',
-      key: 'startTime',
+      title: '专才电话',
+      dataIndex: 'servicerPhone',
+      key: 'servicerPhone',
+    },
+    {
+      title: '专才邮箱',
+      dataIndex: 'servicerEmail',
+      key: 'servicerEmail',
+    },
+    {
+      title: '专才入驻时间',
+      dataIndex: 'servicerRegistrationDate',
+      key: 'servicerRegistrationDate',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-    },
-    {
-      title: '服务启动时间',
-      dataIndex: 'serverTime',
-      key: 'serverTime',
-      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-    },
-    {
-      title: '工单状态',
-      dataIndex: 'state',
-      key: 'state',
-      render(val) {
-        return <Badge color={statusMap[val]} text={status[val]} />;
-      },
     },
     {
       title: '操作',
@@ -96,22 +89,12 @@ class TableListWorkorder extends PureComponent {
         <Fragment>
           {console.log('val', val)}
           <Divider type="vertical" />
-          <Link to={`/workorder/view-workorder/${val._id}`}>查看</Link>
-          <Divider type="vertical" />
-          {this.initialValue(val)}
+          <Button onClick={()=>this.assignPost(val._id)}>派单</Button>
           <Divider type="vertical" />
         </Fragment>
       ),
     },
   ];
-
-  initialValue(val) {
-    if (val.state == '2') {
-      return <Link to={`/item/uporoff-item/${val._id}`}>派单</Link>;
-    } else {
-      return <Link disabled>已派单</Link>;
-    }
-  }
 
   componentDidMount() {
     if (JSON.parse(localStorage.getItem('user')) === null) {
@@ -132,15 +115,15 @@ class TableListWorkorder extends PureComponent {
     }
     const { dispatch } = this.props;
     const params = {
-      operatorID: localStorage.getItem('userId'),
+      id: this.props.match.params._id,
     };
     dispatch({
-      type: 'workorder/queryWorkorder',
+      type: 'workorder/queryAssign',
       payload: params,
     }).then(res => {
-      this.setState({ Workorder: res.findResult });
+      this.setState({ candidates: res.result.candidates });
     });
-    console.log('Workorder:', this.state.Workorder);
+    console.log('candidates:', this.state.candidates);
   }
 
   handleFormReset = () => {
@@ -150,13 +133,13 @@ class TableListWorkorder extends PureComponent {
       formValues: {},
     });
     const params = {
-      operatorID: localStorage.getItem('userId'),
+      id: this.props.match.params._id,
     };
     dispatch({
-      type: 'workorder/queryWorkorder',
+      type: 'workorder/queryAssign',
       payload: params,
     }).then(res => {
-      this.setState({ Workorder: res.findResult });
+      this.setState({ candidates: res.result.candidates });
     });
   };
 
@@ -173,114 +156,53 @@ class TableListWorkorder extends PureComponent {
     });
   };
 
-  handleSearch = e => {
-    e.preventDefault();
-
-    const { dispatch, form } = this.props;
-
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-
-      const values = {
-        ...fieldsValue,
-      };
-
-      console.log('fieldsValue', values);
-
-      this.setState({
-        formValues: values,
-      });
-
-      // dispatch({
-      //   type: 'rule/fetch',
-      //   payload: values,
-      // });
-      const payload = {
-        ...values,
-        operatorID: localStorage.getItem('userId'),
-      };
-      console.log('payload', payload);
-      dispatch({
-        type: 'workorder/queryWorkorder',
-        payload: payload,
-      }).then(res => {
-        this.setState({ Workorder: res.findResult });
-      });
-    });
-  };
-
-  renderSimpleForm() {
-    const {
-      form: { getFieldDecorator },
-      item = {},
-      loading,
-    } = this.props;
-    return (
-      <Form onSubmit={this.handleSearch} layout="inline">
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="工单名">
-              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="工单状态">
-              {getFieldDecorator('state')(
-                <Select placeholder="请选择">
-                  <Option value="0">结束</Option>
-                  <Option value="1">进行中</Option>
-                  <Option value="2">待分配</Option>
-                  <Option value="3">用户终止</Option>
-                  <Option value="4">等待启动</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit">
-                查询
-              </Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-                重置
-              </Button>
-            </span>
-          </Col>
-        </Row>
-      </Form>
-    );
-  }
-
   queryDate(item) {
     if (item.data != null) {
-      this.setState();
       return item.data.findResult;
     } else {
       return item;
     }
   }
 
+  //派单
+  assignPost = servicerId => {
+    const { dispatch } = this.props;
+    const params = {
+      workorderId: this.props.match.params._id,
+      servicerId: servicerId,
+    };
+    dispatch({
+      type: 'workorder/assignPost',
+      payload: params,
+    }).then(res => {
+      if (res.status == '1') {
+        message.success(res.information);
+        this.props.history.push('/workorder/list');
+      } else {
+        message.success(res.information);
+      }
+    });
+  };
+
   render() {
     const { workorder = {}, loading } = this.props;
-    const { Workorder } = this.state;
-    console.log('Workorder', Workorder);
+    const { candidates } = this.state;
+    console.log('Workorder', candidates);
     console.log('loading', loading);
-    const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
+    const { selectedRows } = this.state;
 
     return (
-      <PageHeaderWrapper title={<FormattedMessage id="app.categoty.list.title" />}>
+      <PageHeaderWrapper title={<FormattedMessage id="app.workorder.assign.title" />}>
         <Card bordered={false} loading={loading}>
           <div className={styles.tableList}>
-            <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
             <Table
               selectedRows={selectedRows}
               rowKey="_id"
               loading={loading}
-              dataSource={this.queryDate(Workorder)}
+              dataSource={this.queryDate(candidates)}
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
             />
-            {console.log('categoryList', workorder.data.res)}
           </div>
         </Card>
       </PageHeaderWrapper>
@@ -288,4 +210,4 @@ class TableListWorkorder extends PureComponent {
   }
 }
 
-export default TableListWorkorder;
+export default TableListAssign;

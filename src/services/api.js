@@ -104,6 +104,21 @@ export async function queryPartition(params) {
   return request(`${OPERATOR_URL}/manager/querypartition?_id=${params.id}`);
 }
 
+//分单-专才列表 传入工单id
+export async function queryAssign(params) {
+  console.log('api', params);
+  return request(`${OPERATOR_URL}/manager/assign_get?_id=${params.id}`);
+}
+
+//派单
+export async function assignPost(params) {
+  console.log('api', params);
+  return request(`${OPERATOR_URL}/manager/assignpost?${stringify(params)}`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
 //查看单品列表
 export async function queryItem(params) {
   console.log('api', params);
