@@ -151,6 +151,34 @@ export default [
         ],
       },
       {
+        path: '/workorder',
+        name: 'workorder',
+        icon: 'profile',
+        component: './Workorder/workorder',
+        hideChildrenInMenu: true,
+        routes: [
+          {
+            path: '/workorder',
+            redirect: '/workorder/info',
+          },
+          {
+            path: '/workorder/info',
+            name: 'info',
+            component: './Workorder/analysis',
+          },
+          {
+            path: '/workorder/list',
+            name: 'list',
+            component: './Workorder/work-list',
+          },
+          {
+            path: '/workorder/view-workorder/:_id',
+            name: 'view-workorder',
+            component: './Workorder/details/view',
+          },
+        ],
+      },
+      {
         path: '/messages',
         name: 'messages',
         icon: 'profile',

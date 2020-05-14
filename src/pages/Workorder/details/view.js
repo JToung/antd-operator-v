@@ -9,38 +9,18 @@ import memoryUtils from '@/utils/memoryUtils';
 import moment from 'moment';
 import Link from 'umi/link';
 
+const statusMap = ['red', 'green', 'yellow', 'cyan', 'geekblue'];
+const status = ['结束', '进行中', '待分配', '用户终止', '等待启动'];
 @connect(({ item, loading }) => ({
   item,
-  loading: loading.effects['item'],
+  loading: loading.effects['workorder'],
   //model
 }))
 class ViewItem extends PureComponent {
   constructor(props) {
     super(props);
-    this.interruptColumns = [
-      {
-        title: 'id',
-        dataIndex: '_id',
-        key: '_id',
-      },
-      {
-        title: '中断最小节点',
-        dataIndex: 'stage_from',
-        key: 'stage_from',
-      },
-      {
-        title: '中断最大节点',
-        dataIndex: 'stage_end',
-        key: 'stage_end',
-      },
-      {
-        title: '收取的比例',
-        dataIndex: 'receivable',
-        key: 'receivable',
-      },
-    ];
 
-    this.partitionColumns = [
+    this.logColumns = [
       {
         title: '单品分区ID',
         dataIndex: '_id',
@@ -100,55 +80,26 @@ class ViewItem extends PureComponent {
       },
     ];
 
-    this.taskInstance = [
-      {
-        title: '顺序',
-        dataIndex: 'order',
-      },
-      {
-        title: '任务名',
-        dataIndex: 'name',
-      },
-      {
-        title: '任务内容',
-        dataIndex: 'introduction',
-      },
-      {
-        title: '执行条件',
-        dataIndex: 'conditions',
-      },
-      {
-        title: '最长执行任务时间',
-        dataIndex: 'maxCompletionTime',
-      },
-      {
-        title: '任务通过条件',
-        dataIndex: 'passageConditions',
-      },
-    ];
-
     this.state = {
-      //存储单品
-      Item: {},
+      //存储工单信息
+      Workorder: {},
       //存储单品中断处理表状态
       interruptData: [],
-      //存储分区汇总
-      partitions: [],
+      //分区名
+      partitionsName: '',
       partitionViewVisible: false,
       View: {},
       keyView: '',
       Task: [],
       //品类名
       categoryName: '',
-      //单个单品分区任务表汇总
-      task: [],
+      //任务表汇总
+      log: [],
       //所属品类名
       categoryName: '',
     };
   }
   componentDidMount() {
-    const { dispatch } = this.props;
-
     if (JSON.parse(localStorage.getItem('user')) === null) {
       message.error('未登录！！请登录！');
       this.props.history.push('/');
@@ -167,43 +118,32 @@ class ViewItem extends PureComponent {
     }
     console.log('params_id', this.props.match.params._id);
 
+    const { dispatch } = this.props;
     const params = {
-      id: this.props.match.params._id,
+      operatorID: localStorage.getItem('userId'),
+      _id: this.props.match.params._id,
     };
     dispatch({
-      type: 'item/fetchByItem',
+      type: 'workorder/queryWorkorder',
       payload: params,
     }).then(res => {
-      const Item = res[0];
-      const interruptData = res[0].interrupt;
-      const partitions = res[0].partition;
-      const payload = {
-        _id: Item.categoryID,
+      this.setState({ Workorder: res.findResult[0] });
+      const params1 = {
+        id: res.findResult[0].itemPartition,
       };
-      console.log('this.state.Item.categoryID', Item.categoryID)
+      console.log(params1)
       dispatch({
-        type: 'category/fetchCategory',
-        payload,
+        type: 'workorder/queryPartition',
+        payload: params1,
       }).then(res => {
-        const categoryName = res.res[0].categoryName;
-        this.setState({ categoryName: categoryName });
-        console.log('categoryName', this.state.categoryName);
+        this.setState({ partitionsName: res.findResult.name });
       });
-      console.log('res:', Item);
-      console.log('res:', interruptData);
-      console.log('res:', partitions);
-      this.setState({ Item: Item, interruptData: interruptData, partitions: partitions });
     });
   }
 
-  onItemState(state) {
-    if (state == '1') {
-      return <Badge status="success" text="已上架" />;
-    } else {
-      return <Badge status="error" text="未上架" />;
-    }
+  onState(state) {
+    return <Badge color={statusMap[state]} text={status[state]} />;
   }
-
 
   //查看单品分区
   handlePartitionViewOk = e => {
@@ -242,35 +182,34 @@ class ViewItem extends PureComponent {
   };
 
   re = () => {
-    const { item = {}, loading } = this.props;
-    const { partitions, Item, interruptData } = this.state;
+    const { workorder = {}, loading } = this.props;
+    const { partitions, Workorder, interruptData, partitionsName } = this.state;
     return (
       // 加头部
-      <PageHeaderWrapper title={<FormattedMessage id="app.categoty.basic.title" />}>
+      <PageHeaderWrapper title={<FormattedMessage id="app.workorder.basic.title" />}>
         <Card bordered={false}>
-          <Descriptions title="服务单品包信息" bordered loading={loading} layout="vertical">
-            <Descriptions.Item label="单品包ID">{Item._id}</Descriptions.Item>
-            <Descriptions.Item label="单品包名">{Item.itemName}</Descriptions.Item>
-            <Descriptions.Item label="单品包添加时间">
-              {moment(Item.itemAddTime)
-                .subtract(8, 'hours')
-                .format('YYYY-MM-DD HH:mm:ss')}
+          <Descriptions title="工单信息" bordered loading={loading} layout="vertical">
+            <Descriptions.Item label="工单ID">{Workorder._id}</Descriptions.Item>
+            <Descriptions.Item label="工单名">{Workorder.name}</Descriptions.Item>
+            <Descriptions.Item label="订单id">{Workorder.orderID}</Descriptions.Item>
+            <Descriptions.Item label="工单起始时间" span={3}>
+              {moment(Workorder.startTime).format('YYYY-MM-DD HH:mm:ss')}
             </Descriptions.Item>
-            <Descriptions.Item label="单品包状态">
-              {this.onItemState(Item.itemState)}
+            <Descriptions.Item label="工单状态">{this.onState(Workorder.state)}</Descriptions.Item>
+            <Descriptions.Item label="所属分区名" span={2}>
+              {this.state.partitionsName}
             </Descriptions.Item>
-            <Descriptions.Item label="所属品类名" span={2}>
-              {this.state.categoryName}
+            <Descriptions.Item label="专才id" span={3}>
+              {Workorder.servicer}
             </Descriptions.Item>
-
-            <Descriptions.Item label="单品包介绍" span={3}>
-              {Item.itemIntroduction}
+            <Descriptions.Item label="服务启动时间" span={3}>
+            {moment(Workorder.serverTime).format('YYYY-MM-DD HH:mm:ss')}
             </Descriptions.Item>
-            <Descriptions.Item label="单品分区" span={3}>
-              <Table bordered dataSource={partitions} columns={this.partitionColumns} />
+            <Descriptions.Item label="客户要求" span={3}>
+              {Workorder.requirement}
             </Descriptions.Item>
-            <Descriptions.Item label="单品分区" span={3}>
-              <Table bordered dataSource={interruptData} columns={this.interruptColumns} />
+            <Descriptions.Item label="客户电话" span={3}>
+              {Workorder.customerPhone}
             </Descriptions.Item>
           </Descriptions>
           <div>
@@ -278,7 +217,7 @@ class ViewItem extends PureComponent {
               <Button
                 type="primary"
                 onClick={() => {
-                  this.props.history.push('/item/list');
+                  this.props.history.push('/workorder/list');
                 }}
                 className={styles.ButtonCenter}
               >
@@ -292,17 +231,17 @@ class ViewItem extends PureComponent {
   };
 
   render() {
-    const { item = {}, loading } = this.props;
-    const { partitions, Item, interruptData } = this.state;
+    const { workorder = {}, loading } = this.props;
+    const { partitions, Workorder, interruptData } = this.state;
 
-    console.log('Item', Item);
-    if (Item[0] == null) {
+    console.log('workorder', Workorder);
+    if (Workorder == null) {
       if (this.props.match.params._id == null) {
-        this.props.history.push('/item/list');
+        this.props.history.push('/workorder/list');
       } else {
         return <div>{this.re()}</div>;
       }
-    } else if (Item[0] != null) {
+    } else if (Workorder != null) {
       return <div>{this.re()}</div>;
     }
   }

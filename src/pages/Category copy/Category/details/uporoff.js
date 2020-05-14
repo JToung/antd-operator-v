@@ -1,33 +1,11 @@
 import React, { PureComponent } from 'react';
-import {
-  Upload,
-  Select,
-  Row,
-  Col,
-  Form,
-  Input,
-  Table,
-  Tag,
-  Descriptions,
-  Badge,
-  Card,
-  Button,
-  Tooltip,
-  Modal,
-  message,
-} from 'antd';
-import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
-import { TweenOneGroup } from 'rc-tween-one';
+import { Row, Col, Form, Input, Descriptions, Badge, Card, Button, message } from 'antd';
+import { FormattedMessage } from 'umi-plugin-react/locale';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import LinkButton from '@/components/link-button';
 import styles from './style.less';
 import { connect } from 'dva';
-import DescriptionList from '@/components/DescriptionList';
-import memoryUtils from '@/utils/memoryUtils';
-import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
-import moment from 'moment';
 
-const { Column, ColumnGroup } = Table;
+import moment from 'moment';
 
 @connect(({ category, loading }) => ({
   category,
@@ -35,11 +13,9 @@ const { Column, ColumnGroup } = Table;
   //model
 }))
 @Form.create()
-class DeleteItem extends PureComponent {
-
+class UPOROFF extends PureComponent {
   componentDidMount() {
-    const { dispatch, match, category } = this.props;
-    const { params } = match;
+    const { dispatch } = this.props;
 
     if (JSON.parse(localStorage.getItem('user')) === null) {
       message.error('未登录！！请登录！');
@@ -71,8 +47,7 @@ class DeleteItem extends PureComponent {
   }
 
   handleSubmit = e => {
-    const { dispatch, match } = this.props;
-    const { params } = match;
+    const { dispatch } = this.props;
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       console.log('values', values);
@@ -115,18 +90,28 @@ class DeleteItem extends PureComponent {
           categoryMaxPrice: res1.categoryMaxPrice,
           categoryDeleteTime: new Date().getTime(),
           id: this.props.match.params._id,
+          object:"c",
         };
         console.log('参数', payload);
         dispatch({
-          type: 'category/deleteCategory',
+          type: 'category/uporoffCategory',
           payload,
         }).then(res => {
           console.log('res', res);
           if (res != null) {
-            message.success('申请删除成功！');
-            this.props.history.push('/category/category/list');
+            if (res.upInstance.changedData.categoryState == '0') {
+              message.success('申请上架成功！');
+              this.props.history.push('/category/list');
+            } else if (res.upInstance.changedData.categoryState == '1') {
+              message.success('申请下架成功！');
+              this.props.history.push('/category/list');
+            }
           } else {
-            message.error('申请删除失败，请重试!');
+            if (res.upInstance.changedData.categoryState == '0') {
+              message.error('申请上架失败，请重试!');
+            } else if (res.upInstance.changedData.categoryState == '1') {
+              message.error('申请下架失败，请重试!');
+            }
           }
         });
       });
@@ -144,7 +129,7 @@ class DeleteItem extends PureComponent {
   initialValue(category) {
     console.log('category.data.res', category.data.res);
     if (category.data.res == null) {
-      this.props.history.push('/category/category/list');
+      this.props.history.push('/category/list');
     } else if (category.data.res != null) {
       const {
         category = {},
@@ -231,7 +216,7 @@ class DeleteItem extends PureComponent {
 
   tfSJcategory(category) {
     if (category.data.res == null) {
-      this.props.history.push('/category/category/list');
+      this.props.history.push('/category/list');
     } else if (category.data.res != null) {
       const {
         category = {},
@@ -243,18 +228,18 @@ class DeleteItem extends PureComponent {
           <div>
             <Row gutter={16}>
               <Col lg={24} md={12} sm={24}>
-                <Form.Item label="删除理由">
+                <Form.Item label="下架理由">
                   {getFieldDecorator('categoryReason', {
                     rules: [
                       {
                         required: true,
-                        message: '请输入删除理由',
+                        message: '请输入下架理由',
                       },
                     ],
                   })(
                     <Input.TextArea
                       style={{ minHeight: 32 }}
-                      placeholder="请输入删除理由"
+                      placeholder="请输入下架理由"
                       rows={4}
                     />
                   )}
@@ -264,7 +249,58 @@ class DeleteItem extends PureComponent {
           </div>
         );
       } else if (category.data.res[0].categoryState == '0') {
-        return <div></div>;
+        return (
+          <div>
+            <Row gutter={16}>
+              <Col lg={24} md={12} sm={24}>
+                <Form.Item label="上架理由">
+                  {getFieldDecorator('categoryReason', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请输入上架理由',
+                      },
+                    ],
+                  })(
+                    <Input.TextArea
+                      style={{ minHeight: 32 }}
+                      placeholder="请输入上架理由"
+                      rows={4}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
+          </div>
+        );
+      }
+    }
+  }
+
+  tfSJcategoryName(category) {
+    if (category.data.res == null) {
+      this.props.history.push('/category/list');
+    } else if (category.data.res != null) {
+      if (category.data.res[0].categoryState == '1') {
+        const Name = "下架品类包";
+        return Name
+      } else if (category.data.res[0].categoryState == '0') {
+        const Name = "上架品类包";
+        return Name
+      }
+    }
+  }
+
+  tfSJcategoryButton(category) {
+    if (category.data.res == null) {
+      this.props.history.push('/category/list');
+    } else if (category.data.res != null) {
+      if (category.data.res[0].categoryState == '1') {
+        const Name = "确认下架";
+        return Name
+      } else if (category.data.res[0].categoryState == '0') {
+        const Name = "确认上架";
+        return Name
       }
     }
   }
@@ -282,7 +318,7 @@ class DeleteItem extends PureComponent {
     return (
       // 加头部
       <PageHeaderWrapper title={<FormattedMessage id="app.categoty.basic.title" />}>
-        <Card bordered={false} title="删除品类包">
+        <Card bordered={false} title={this.tfSJcategoryName(category)}>
           <Form layout="vertical" onSubmit={this.handleSubmit}>
             {this.initialValue(category)}
             <Card bordered={false}>
@@ -295,7 +331,7 @@ class DeleteItem extends PureComponent {
                       className={styles.ButtonRight}
                       loading={loading}
                     >
-                      确认删除
+                      {this.tfSJcategoryButton(category)}
                     </Button>
                   </Form.Item>
                 </Col>
@@ -306,7 +342,7 @@ class DeleteItem extends PureComponent {
                       htmlType="submit"
                       className={styles.ButtonLeft}
                       onClick={() => {
-                        this.props.history.push('/category/category/list');
+                        this.props.history.push('/category/list');
                       }}
                       loading={loading}
                     >
@@ -323,4 +359,4 @@ class DeleteItem extends PureComponent {
   }
 }
 
-export default DeleteItem;
+export default UPOROFF;

@@ -1,31 +1,23 @@
 import React, { Component, Suspense } from 'react';
 import { connect } from 'dva';
-import { Row, Col, Icon, Menu, Dropdown } from 'antd';
+import { Row, Col, Icon, Menu, Dropdown, message } from 'antd';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import { getTimeDistance } from '@/utils/utils';
-import styles from './style.less';
+import styles from './Home.less';
 import PageLoading from '@/components/PageLoading';
 
 const IntroduceRow = React.lazy(() => import('./IntroduceRow'));
 const SalesCard = React.lazy(() => import('./SalesCard'));
-const ListCard = React.lazy(() => import('./ListCard'));
+const CashFlowCard = React.lazy(() => import('./CashFlowCard'));
 const TopSearch = React.lazy(() => import('./TopSearch'));
 const ProportionSales = React.lazy(() => import('./ProportionSales'));
 const OfflineData = React.lazy(() => import('./OfflineData'));
-const topColResponsiveProps = {
-  xs: 24,
-  sm: 12,
-  md: 12,
-  lg: 12,
-  xl: 12,
-  style: { marginBottom: 24 },
-};
 
 @connect(({ chart, loading }) => ({
   chart,
   loading: loading.effects['chart/fetch'],
 }))
-class AnalysisItem extends Component {
+class OperatorHome extends Component {
   state = {
     salesType: 'all',
     currentTabKey: '',
@@ -33,6 +25,10 @@ class AnalysisItem extends Component {
   };
 
   componentDidMount() {
+    if(localStorage.getItem('userId')===null){
+      message.error("未登录！！请登录！");
+      this.props.history.push('/user/login');
+    }
     const { dispatch } = this.props;
     this.reqRef = requestAnimationFrame(() => {
       dispatch({
@@ -96,7 +92,7 @@ class AnalysisItem extends Component {
 
   render() {
     const { rangePickerValue, salesType, currentTabKey } = this.state;
-    const { match, chart, loading } = this.props;
+    const { chart, loading } = this.props;
     const {
       visitData,
       visitData2,
@@ -147,13 +143,13 @@ class AnalysisItem extends Component {
           />
         </Suspense>
         <div>
-          <Suspense fallback={null}>
-            <ListCard />
-          </Suspense>
+            <Suspense fallback={null}>
+              <CashFlowCard />
+            </Suspense>
         </div>
       </GridContent>
     );
   }
 }
 
-export default AnalysisItem;
+export default OperatorHome;

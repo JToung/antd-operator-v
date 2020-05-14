@@ -3,7 +3,7 @@ import { Row, Col, Table, Tooltip, Card, Icon } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import numeral from 'numeral';
 import Trend from '@/components/Trend';
-import styles from './style.less';
+import styles from './Category.less';
 import NumberInfo from '@/components/NumberInfo';
 import { MiniArea } from '@/components/Charts';
 
@@ -42,7 +42,7 @@ const columns = [
   },
 ];
 
-const TopSearchItem = memo(({ loading, visitData2, searchData, dropdownGroup }) => (
+const TopSearch = memo(({ loading, visitData2, searchData, dropdownGroup }) => (
   <Card
     loading={loading}
     title={
@@ -107,4 +107,4 @@ const TopSearchItem = memo(({ loading, visitData2, searchData, dropdownGroup }) 
   </Card>
 ));
 
-export default TopSearchItem;
+export default TopSearch;

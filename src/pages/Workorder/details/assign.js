@@ -268,7 +268,7 @@ class TableListWorkorder extends PureComponent {
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
 
     return (
-      <div>
+      <PageHeaderWrapper title={<FormattedMessage id="app.categoty.list.title" />}>
         <Card bordered={false} loading={loading}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
@@ -283,7 +283,7 @@ class TableListWorkorder extends PureComponent {
             {console.log('categoryList', workorder.data.res)}
           </div>
         </Card>
-      </div>
+      </PageHeaderWrapper>
     );
   }
 }

@@ -269,7 +269,7 @@ class ViewItem extends PureComponent {
             <Descriptions.Item label="单品分区" span={3}>
               <Table bordered dataSource={partitions} columns={this.partitionColumns} />
             </Descriptions.Item>
-            <Descriptions.Item label="单品分区" span={3}>
+            <Descriptions.Item label="单品中断处理" span={3}>
               <Table bordered dataSource={interruptData} columns={this.interruptColumns} />
             </Descriptions.Item>
           </Descriptions>

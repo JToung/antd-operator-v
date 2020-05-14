@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { Row, Col, Icon, Menu, Dropdown, message } from 'antd';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import { getTimeDistance } from '@/utils/utils';
-import styles from './Home.less';
+import styles from './style.less';
 import PageLoading from '@/components/PageLoading';
 
 const IntroduceRow = React.lazy(() => import('./IntroduceRow'));

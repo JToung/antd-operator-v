@@ -11,7 +11,7 @@ import { PlusOutlined } from '@ant-design/icons';
  * @returns {*}
  * @constructor
  */
-class AddTagItem extends React.Component {
+class AddTag extends React.Component {
   state = {
     tags: ['Tag 1', 'Tag 2', 'Tag 3'],
     inputVisible: false,

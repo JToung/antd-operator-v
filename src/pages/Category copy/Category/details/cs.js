@@ -1,7 +1,7 @@
 import { Tag, Input, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-class EditableTagGroupItem extends React.Component {
+class EditableTagGroup extends React.Component {
   state = {
     tags: ['Unremovable', 'Tag 2', 'Tag 3'],
     inputVisible: false,

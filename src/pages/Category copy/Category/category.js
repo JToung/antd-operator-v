@@ -6,7 +6,7 @@ import {  message } from 'antd';
 
 
 @connect()
-class IndexItem extends Component {
+class Index extends Component {
   componentDidMount() {
     if (JSON.parse(localStorage.getItem('user')) === null) {
       message.error('未登录！！请登录！');
@@ -56,4 +56,4 @@ class IndexItem extends Component {
   }
 }
 
-export default IndexItem;
+export default Index;

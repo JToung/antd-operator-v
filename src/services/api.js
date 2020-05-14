@@ -92,6 +92,18 @@ export async function uporoffCategory(params) {
   });
 }
 
+//查看工单列表
+export async function queryWorkorder(params) {
+  console.log('api', params);
+  return request(`${OPERATOR_URL}/manager/queryworkorder?${stringify(params)}`);
+}
+
+//查看单个分区
+export async function queryPartition(params) {
+  console.log('api', params);
+  return request(`${OPERATOR_URL}/manager/querypartition?_id=${params.id}`);
+}
+
 //查看单品列表
 export async function queryItem(params) {
   console.log('api', params);

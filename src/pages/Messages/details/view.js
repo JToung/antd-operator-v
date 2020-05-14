@@ -119,6 +119,21 @@ class View extends PureComponent {
     }
   };
 
+  getReason = () => {
+    const { messageData } = this.state;
+    switch (messageData.verifiedData.object) {
+      case 'c':
+        return messageData.verifiedData.categoryReason;
+        break;
+      case 'o':
+        return " ";
+        break;
+      case 'I':
+        return " ";
+        break;
+    }
+  };
+
   render() {
     const { loading } = this.props;
     const { messageData } = this.state;
@@ -135,6 +150,9 @@ class View extends PureComponent {
               <Descriptions.Item label="审核人名">{messageData.auditorName}</Descriptions.Item>
               <Descriptions.Item label="消息发送时间">
                 {moment(messageData.timestamp).format('YYYY-MM-DD HH:mm:ss')}
+              </Descriptions.Item>
+              <Descriptions.Item label="审核申请" span={3}>
+                {this.getReason()}
               </Descriptions.Item>
               <Descriptions.Item label="审核结果" span={3}>
                 {this.getResult(messageData.result)}

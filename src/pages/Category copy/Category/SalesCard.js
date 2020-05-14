@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { Table, Row, Col, Card, Tabs, DatePicker } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import numeral from 'numeral';
-import styles from './style.less';
+import styles from './Category.less';
 import { Bar } from '@/components/Charts';
 import moment from 'moment';
 import DescriptionList from '@/components/DescriptionList';
@@ -51,8 +51,8 @@ const SalesCard = memo(
           tabBarStyle={{ marginBottom: 24 }}
         >
           <TabPane
-            tab={<FormattedMessage id="app.analysis.workorder" defaultMessage="Workorder" />}
-            key="Workorder"
+            tab={<FormattedMessage id="app.analysis.categorys" defaultMessage="Categorys" />}
+            key="categorys"
           >
             <Row>
               <Col xl={16} lg={12} md={12} sm={24} xs={24}>
@@ -61,8 +61,8 @@ const SalesCard = memo(
                     height={295}
                     title={
                       <FormattedMessage
-                        id="app.analysis.workorder-trend"
-                        defaultMessage="Workorder Trend"
+                        id="app.analysis.categorys-trend"
+                        defaultMessage="Categorys Trend"
                       />
                     }
                     data={salesData}
@@ -73,8 +73,8 @@ const SalesCard = memo(
                 <div className={styles.salesRank}>
                   <h4 className={styles.rankingTitle}>
                     <FormattedMessage
-                      id="app.analysis.workorder-ranking"
-                      defaultMessage="Workorder Ranking"
+                      id="app.analysis.categorys-ranking"
+                      defaultMessage="Categorys Ranking"
                     />
                   </h4>
                 </div>
@@ -82,8 +82,8 @@ const SalesCard = memo(
             </Row>
           </TabPane>
           <TabPane
-            tab={<FormattedMessage id="app.analysis.workorder-ground" defaultMessage="Workorder Ground" />}
-            key="Workorder ground"
+            tab={<FormattedMessage id="app.analysis.categorys-ground" defaultMessage="Categorys Ground" />}
+            key="categorys ground"
           >
             <Row>
               <Col xl={16} lg={12} md={12} sm={24} xs={24}>
@@ -92,8 +92,8 @@ const SalesCard = memo(
                     height={295}
                     title={
                       <FormattedMessage
-                        id="app.analysis.workorder-trend-ground"
-                        defaultMessage="Workorder Trend Ground"
+                        id="app.analysis.categorys-trend-ground"
+                        defaultMessage="Categorys Trend Ground"
                       />
                     }
                     data={salesData}
@@ -104,39 +104,8 @@ const SalesCard = memo(
                 <div className={styles.salesRank}>
                   <h4 className={styles.rankingTitle}>
                     <FormattedMessage
-                      id="app.analysis.workorder-ranking"
-                      defaultMessage="Workorder Ranking"
-                    />
-                  </h4>
-                </div>
-              </Col>
-            </Row>
-          </TabPane>
-          <TabPane
-            tab={<FormattedMessage id="app.analysis.workorder-complete" defaultMessage="Workorder Complete" />}
-            key="Workorder Complete"
-          >
-            <Row>
-              <Col xl={16} lg={12} md={12} sm={24} xs={24}>
-                <div className={styles.salesBar}>
-                  <Bar
-                    height={295}
-                    title={
-                      <FormattedMessage
-                        id="app.analysis.workorder-trend-complete"
-                        defaultMessage="Workorder Trend Complete"
-                      />
-                    }
-                    data={salesData}
-                  />
-                </div>
-              </Col>
-              <Col xl={8} lg={12} md={12} sm={24} xs={24}>
-                <div className={styles.salesRank}>
-                  <h4 className={styles.rankingTitle}>
-                    <FormattedMessage
-                      id="app.analysis.workorder-ranking"
-                      defaultMessage="Workorder Ranking"
+                      id="app.analysis.categorys-ranking"
+                      defaultMessage="Categorys Ranking"
                     />
                   </h4>
                 </div>
