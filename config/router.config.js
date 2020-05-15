@@ -184,6 +184,34 @@ export default [
         ],
       },
       {
+        path: '/servicer',
+        name: 'servicer',
+        icon: 'profile',
+        component: './Servicer/servicer',
+        hideChildrenInMenu: true,
+        routes: [
+          {
+            path: '/servicer',
+            redirect: '/servicer/info',
+          },
+          {
+            path: '/servicer/info',
+            name: 'info',
+            component: './Servicer/analysis',
+          },
+          {
+            path: '/servicer/list',
+            name: 'list',
+            component: './Servicer/servicer-list',
+          },
+          {
+            path: '/servicer/view-servicer/:_id',
+            name: 'view-servicer',
+            component: './Servicer/details/view',
+          },
+        ],
+      },
+      {
         path: '/messages',
         name: 'messages',
         icon: 'profile',

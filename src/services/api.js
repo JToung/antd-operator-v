@@ -119,6 +119,18 @@ export async function assignPost(params) {
   });
 }
 
+//查看专才列表
+export async function queryServicer(params) {
+  console.log('api', params);
+  return request(`${OPERATOR_URL}/manager/queryservicer?_id=${params.id}`);
+}
+
+
+//查看运营商列表
+export async function queryOperatorList() {
+  return request(`${platform_URL}/manager/queryoperator`);
+}
+
 //查看单品列表
 export async function queryItem(params) {
   console.log('api', params);

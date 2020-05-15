@@ -38,17 +38,17 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['red', 'green', 'yellow', 'cyan', 'geekblue', 'lime'];
-const status = ['结束', '进行中', '待分配', '用户终止', '等待启动', '已派单未进行'];
+const statusMap = ['error', 'success'];
+const status = ['未运行', '正在运行'];
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ workorder, loading }) => ({
-  workorder,
-  loading: loading.effects['workorder'],
+@connect(({ servicer, loading }) => ({
+  servicer,
+  loading: loading.effects['servicer'],
   //model
 }))
 @Form.create()
-class TableListWorkorder extends PureComponent {
+class TableList extends PureComponent {
   state = {
     modalVisible: false,
     updateModalVisible: false,
@@ -56,38 +56,37 @@ class TableListWorkorder extends PureComponent {
     selectedRows: [],
     formValues: {},
     stepFormValues: {},
-    Workorder: [],
+    servicer: [],
   };
 
   columns = [
     {
-      title: '工单ID',
+      title: '专才ID',
       dataIndex: '_id',
       key: '_id',
     },
     {
-      title: '工单名称',
-      dataIndex: 'name',
-      key: 'name',
+      title: '专才名称',
+      dataIndex: 'servicerName',
+      key: 'servicerName',
     },
     {
-      title: '工单启动时间',
-      dataIndex: 'startTime',
-      key: 'startTime',
+      title: '专才加入时间',
+      dataIndex: 'servicerRegistrationDate',
+      key: 'servicerRegistrationDate',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
-      title: '服务启动时间',
-      dataIndex: 'serverTime',
-      key: 'serverTime',
-      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      title: '专才联系方式',
+      dataIndex: 'servicerPhone',
+      key: 'servicerPhone',
     },
     {
-      title: '工单状态',
-      dataIndex: 'state',
-      key: 'state',
+      title: '专才状态',
+      dataIndex: 'servicerStatus',
+      key: 'servicerStatus',
       render(val) {
-        return <Badge color={statusMap[val]} text={status[val]} />;
+        this.getServicerStatus(val)
       },
     },
     {
@@ -96,7 +95,7 @@ class TableListWorkorder extends PureComponent {
         <Fragment>
           {console.log('val', val)}
           <Divider type="vertical" />
-          <Link to={`/workorder/view-workorder/${val._id}`}>查看</Link>
+          <Link to={`/servicer/view-servicer/${val._id}`}>查看</Link>
           <Divider type="vertical" />
           {this.initialValue(val)}
           <Divider type="vertical" />
@@ -107,9 +106,17 @@ class TableListWorkorder extends PureComponent {
 
   initialValue(val) {
     if (val.state == '2') {
-      return <Link to={`/workorder/assign-workorder/${val._id}`}>派单</Link>;
+      return <Link to={`/workorder/assign-workorder/${val._id}`}>审核</Link>;
     } else {
-      return <Link disabled>已派单</Link>;
+      return <Link disabled>已审核</Link>;
+    }
+  }
+
+  getServicerStatus(val){
+    if (val == 'true') {
+      return <Badge status={statusMap[1]} text={status[1]} />;
+    } else {
+      return <Badge status={statusMap[0]} text={status[0]} />;
     }
   }
 
@@ -131,16 +138,17 @@ class TableListWorkorder extends PureComponent {
       }
     }
     const { dispatch } = this.props;
-    const params = {
-      operatorID: localStorage.getItem('userId'),
+    const payload = {
+      id: localStorage.getItem('userId'),
     };
     dispatch({
-      type: 'workorder/queryWorkorder',
-      payload: params,
+      type: 'servicer/queryServicer',
+      payload:payload,
     }).then(res => {
-      this.setState({ Workorder: res.findResult });
+      console.log(res)
+      this.setState({ servicer: res.findResult });
     });
-    console.log('Workorder:', this.state.Workorder);
+    console.log('servicer:', this.state.servicer);
   }
 
   handleFormReset = () => {
@@ -149,14 +157,15 @@ class TableListWorkorder extends PureComponent {
     this.setState({
       formValues: {},
     });
-    const params = {
-      operatorID: localStorage.getItem('userId'),
+    const payload = {
+      id: localStorage.getItem('userId'),
     };
     dispatch({
-      type: 'workorder/queryWorkorder',
-      payload: params,
+      type: 'servicer/queryServicer',
+      payload:payload,
     }).then(res => {
-      this.setState({ Workorder: res.findResult });
+      console.log(res)
+      this.setState({ servicer: res.findResult });
     });
   };
 
@@ -191,20 +200,17 @@ class TableListWorkorder extends PureComponent {
         formValues: values,
       });
 
-      // dispatch({
-      //   type: 'rule/fetch',
-      //   payload: values,
-      // });
+      console.log('payload', payload);
       const payload = {
         ...values,
-        operatorID: localStorage.getItem('userId'),
+        id: localStorage.getItem('userId'),
       };
-      console.log('payload', payload);
       dispatch({
-        type: 'workorder/queryWorkorder',
-        payload: payload,
+        type: 'servicer/queryServicer',
+        payload:payload,
       }).then(res => {
-        this.setState({ Workorder: res.findResult });
+        console.log(res)
+        this.setState({ servicer: res.findResult });
       });
     });
   };
@@ -212,27 +218,22 @@ class TableListWorkorder extends PureComponent {
   renderSimpleForm() {
     const {
       form: { getFieldDecorator },
-      item = {},
       loading,
     } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="工单名">
-              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
+            <FormItem label="专才名">
+              {getFieldDecorator('servicerName')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="工单状态">
-              {getFieldDecorator('state')(
+            <FormItem label="专才状态">
+              {getFieldDecorator('servicerStatus')(
                 <Select placeholder="请选择">
-                  <Option value="0">结束</Option>
-                  <Option value="1">进行中</Option>
-                  <Option value="2">待分配</Option>
-                  <Option value="3">用户终止</Option>
-                  <Option value="4">等待启动</Option>
-                  <Option value="5">已派单未进行</Option>
+                  <Option value="false">未运行</Option>
+                  <Option value="true">正在运行</Option>
                 </Select>
               )}
             </FormItem>
@@ -262,9 +263,9 @@ class TableListWorkorder extends PureComponent {
   }
 
   render() {
-    const { workorder = {}, loading } = this.props;
-    const { Workorder } = this.state;
-    console.log('Workorder', Workorder);
+    const { loading } = this.props;
+    const { servicer } = this.state;
+    console.log('servicer', servicer);
     console.log('loading', loading);
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
 
@@ -277,11 +278,10 @@ class TableListWorkorder extends PureComponent {
               selectedRows={selectedRows}
               rowKey="_id"
               loading={loading}
-              dataSource={this.queryDate(Workorder)}
+              dataSource={this.queryDate(servicer)}
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
             />
-            {console.log('categoryList', workorder.data.res)}
           </div>
         </Card>
       </div>
@@ -289,4 +289,4 @@ class TableListWorkorder extends PureComponent {
   }
 }
 
-export default TableListWorkorder;
+export default TableList;
