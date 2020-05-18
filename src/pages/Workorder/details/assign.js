@@ -170,6 +170,7 @@ class TableListAssign extends PureComponent {
     const params = {
       workorderId: this.props.match.params._id,
       servicerId: servicerId,
+      operatorId: localStorage.getItem('userId'),
     };
     dispatch({
       type: 'workorder/assignPost',

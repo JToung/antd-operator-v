@@ -89,7 +89,7 @@ class Editor extends PureComponent {
         categoryReviseTime: new Date().getTime(),
         object:"c",
         _id: this.props.match.params._id,
-        id: this.props.match.params._id,
+        operatorId: localStorage.getItem('userId'),
       };
 
       console.log('values', values);

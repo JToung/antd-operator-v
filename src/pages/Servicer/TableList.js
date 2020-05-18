@@ -85,9 +85,9 @@ class TableList extends PureComponent {
       title: '专才状态',
       dataIndex: 'servicerStatus',
       key: 'servicerStatus',
-      render(val) {
+      render: val => (
         this.getServicerStatus(val)
-      },
+      ),
     },
     {
       title: '操作',
@@ -254,9 +254,10 @@ class TableList extends PureComponent {
   }
 
   queryDate(item) {
-    if (item.data != null) {
+    console.log("item",item)
+    if (item != []) {
       this.setState();
-      return item.data.findResult;
+      return item;
     } else {
       return item;
     }
@@ -278,7 +279,7 @@ class TableList extends PureComponent {
               selectedRows={selectedRows}
               rowKey="_id"
               loading={loading}
-              dataSource={this.queryDate(servicer)}
+              dataSource={servicer}
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
             />

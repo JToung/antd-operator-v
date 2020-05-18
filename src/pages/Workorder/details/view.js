@@ -9,8 +9,8 @@ import memoryUtils from '@/utils/memoryUtils';
 import moment from 'moment';
 import Link from 'umi/link';
 
-const statusMap = ['red', 'green', 'yellow', 'cyan', 'geekblue'];
-const status = ['结束', '进行中', '待分配', '用户终止', '等待启动'];
+const statusMap = ['red', 'green', 'yellow', 'cyan', 'geekblue', 'lime'];
+const status = ['结束', '进行中', '待分配', '用户终止', '等待启动', '已派单未进行'];
 @connect(({ item, loading }) => ({
   item,
   loading: loading.effects['workorder'],

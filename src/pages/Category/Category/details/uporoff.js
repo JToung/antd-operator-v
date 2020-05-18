@@ -67,7 +67,9 @@ class UPOROFF extends PureComponent {
         payload: params1,
       }).then(res => {
         const res1 = res.res[0];
+        console.log('res', res);
         const payload = {
+          operatorId: localStorage.getItem('userId'),
           ...values,
           categoryName: res1.categoryName,
           categoryAddTime: res1.categoryAddTime,
@@ -89,7 +91,7 @@ class UPOROFF extends PureComponent {
           categoryMinPrice: res1.categoryMinPrice,
           categoryMaxPrice: res1.categoryMaxPrice,
           categoryDeleteTime: new Date().getTime(),
-          id: this.props.match.params._id,
+          _id: this.props.match.params._id,
           object:"c",
         };
         console.log('参数', payload);
@@ -99,19 +101,14 @@ class UPOROFF extends PureComponent {
         }).then(res => {
           console.log('res', res);
           if (res != null) {
-            if (res.upInstance.changedData.categoryState == '0') {
-              message.success('申请上架成功！');
+            if (res.status == '1') {
+              message.success(res.information);
               this.props.history.push('/category/list');
-            } else if (res.upInstance.changedData.categoryState == '1') {
-              message.success('申请下架成功！');
-              this.props.history.push('/category/list');
+            } else {
+              message.error(res.information);
             }
           } else {
-            if (res.upInstance.changedData.categoryState == '0') {
-              message.error('申请上架失败，请重试!');
-            } else if (res.upInstance.changedData.categoryState == '1') {
-              message.error('申请下架失败，请重试!');
-            }
+            message.error("请重试");
           }
         });
       });

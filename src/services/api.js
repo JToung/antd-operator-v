@@ -7,9 +7,7 @@ import ajax from './ajax';
 export async function queryNews(params) {
   console.log('api', params);
   return request(
-    `${OPERATOR_URL}/manager/getnews?verifiedData.categoryOperator=${params.operator}&read=${
-      params.read
-    }`
+    `${OPERATOR_URL}/manager/getnews?receiveId=${params.operator}&read=${params.read}`
   );
 }
 
@@ -62,7 +60,7 @@ export async function addCategory(params) {
 //添加品类
 export async function editorCategory(params) {
   console.log('api', params);
-  return request(`${OPERATOR_URL}/manager/updateCategory_O?_id=${params.id}`, {
+  return request(`${OPERATOR_URL}/manager/updateCategory_O?${stringify(params)}`, {
     method: 'POST',
     body: params,
   });
@@ -77,7 +75,7 @@ export async function queryCategory(params) {
 //删除品类
 export async function deleteCategory(params) {
   console.log('api', params);
-  return request(`${OPERATOR_URL}/manager/deletecategory?_id=${params.id}`, {
+  return request(`${OPERATOR_URL}/manager/deletecategory?${stringify(params)}`, {
     method: 'POST',
     body: params,
   });
@@ -86,7 +84,7 @@ export async function deleteCategory(params) {
 //上下架品类
 export async function uporoffCategory(params) {
   console.log('uporoffCategoryapi', params);
-  return request(`${OPERATOR_URL}/manager/uporoff?_id=${params.id}`, {
+  return request(`${OPERATOR_URL}/manager/uporoff?${stringify(params)}`, {
     method: 'POST',
     body: params,
   });
@@ -122,9 +120,8 @@ export async function assignPost(params) {
 //查看专才列表
 export async function queryServicer(params) {
   console.log('api', params);
-  return request(`${OPERATOR_URL}/manager/queryservicer?_id=${params.id}`);
+  return request(`${OPERATOR_URL}/manager/queryservicer?operatorId=${params.id}`);
 }
-
 
 //查看运营商列表
 export async function queryOperatorList() {
