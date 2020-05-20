@@ -68,32 +68,8 @@ class ViewItem extends PureComponent {
             <div>
               {console.log('view', this.state.View)}
               {console.log('record', record)}
-              <Link onClick={() => this.showPartitionViewModal(record._id)}>查看</Link>
-              <Modal
-                title="查看单品分区"
-                visible={this.state.partitionViewVisible}
-                onOk={this.handlePartitionViewOk}
-                onCancel={this.handlePartitionViewCancel}
-                width={720}
-              >
-                <Descriptions bordered layout="vertical">
-                  <Descriptions.Item label="单品分区名">{record.name}</Descriptions.Item>
-                  <Descriptions.Item label="价格">{record.price}</Descriptions.Item>
-                  <Descriptions.Item label="单品应用场景">{record.applicable}</Descriptions.Item>
-                  <Descriptions.Item label="风格">{record.style}</Descriptions.Item>
-                  <Descriptions.Item label="行业">{record.industry}</Descriptions.Item>
-                  <Descriptions.Item label="类型">{record.type}</Descriptions.Item>
-                  <Descriptions.Item label="单品分区简介" span={3}>
-                    {record.introduction}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="细节" span={3}>
-                    {record.detail}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="单品任务" span={3}>
-                    <Table bordered dataSource={this.state.Task} columns={this.taskInstance} />
-                  </Descriptions.Item>
-                </Descriptions>
-              </Modal>
+              <Link onClick={() => this.showPartitionViewModal(record)}>查看</Link>
+              {this.reM()}
               <Divider type="vertical" />
             </div>
           ) : null,
@@ -135,6 +111,8 @@ class ViewItem extends PureComponent {
       //存储分区汇总
       partitions: [],
       partitionViewVisible: false,
+      //存储单个分区
+      partitionsDG: {},
       View: {},
       keyView: '',
       Task: [],
@@ -180,18 +158,18 @@ class ViewItem extends PureComponent {
       const payload = {
         _id: Item.categoryID,
       };
-      console.log('this.state.Item.categoryID', Item.categoryID)
+      console.log('this.state.Item.categoryID', Item.categoryID);
       dispatch({
         type: 'category/fetchCategory',
         payload,
       }).then(res => {
-        if(res.res.length != 0){
+        if (res.res.length != 0) {
           const categoryName = res.res[0].categoryName;
           this.setState({ categoryName: categoryName });
           console.log('categoryName', this.state.categoryName);
-        }else{
-          this.setState({ categoryName: "品类可能被删除" });
-        }        
+        } else {
+          this.setState({ categoryName: '品类可能被删除' });
+        }
       });
       console.log('res:', Item);
       console.log('res:', interruptData);
@@ -208,8 +186,38 @@ class ViewItem extends PureComponent {
     }
   }
 
-
   //查看单品分区
+  reM = () => {
+    const { partitionsDG } = this.state;
+    return (
+      <Modal
+        title="查看单品分区"
+        visible={this.state.partitionViewVisible}
+        onOk={this.handlePartitionViewOk}
+        onCancel={this.handlePartitionViewCancel}
+        width={720}
+      >
+        <Descriptions bordered layout="vertical">
+          <Descriptions.Item label="单品分区名">{partitionsDG.name}</Descriptions.Item>
+          <Descriptions.Item label="价格">{partitionsDG.price}</Descriptions.Item>
+          <Descriptions.Item label="单品应用场景">{partitionsDG.applicable}</Descriptions.Item>
+          <Descriptions.Item label="风格">{partitionsDG.style}</Descriptions.Item>
+          <Descriptions.Item label="行业">{partitionsDG.industry}</Descriptions.Item>
+          <Descriptions.Item label="类型">{partitionsDG.type}</Descriptions.Item>
+          <Descriptions.Item label="单品分区简介" span={3}>
+            {partitionsDG.introduction}
+          </Descriptions.Item>
+          <Descriptions.Item label="细节" span={3}>
+            {partitionsDG.detail}
+          </Descriptions.Item>
+          <Descriptions.Item label="单品任务" span={3}>
+            <Table bordered dataSource={this.state.Task} columns={this.taskInstance} />
+          </Descriptions.Item>
+        </Descriptions>
+      </Modal>
+    );
+  };
+
   handlePartitionViewOk = e => {
     console.log(e);
     this.setState({
@@ -217,13 +225,13 @@ class ViewItem extends PureComponent {
     });
   };
 
-  showPartitionViewModal = keyView => {
-    this.setState({ keyView: keyView });
-    console.log('keyEditor', keyView);
+  showPartitionViewModal = View => {
+    this.setState({ keyView: View._id });
+    console.log('keyEditor', View);
     const { dispatch } = this.props;
 
     const params = {
-      id: keyView,
+      id: View._id,
     };
     dispatch({
       type: 'item/fetchTask',
@@ -234,6 +242,7 @@ class ViewItem extends PureComponent {
     });
 
     this.setState({
+      partitionsDG: View,
       partitionViewVisible: true,
     });
   };
@@ -308,8 +317,8 @@ class ViewItem extends PureComponent {
       }
     } else if (Item[0] != null) {
       return <div>{this.re()}</div>;
-    }else {
-      return <div></div>;
+    } else {
+      return <div />;
     }
   }
 }

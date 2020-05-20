@@ -91,7 +91,7 @@ class Update extends PureComponent {
       }).then(res => {
         console.log('res', res);
         if (res != null) {
-          message.success('编辑成功！');
+          message.success('发送编辑申请成功！');
           this.props.history.push('/operator/center');
         } else {
           message.error('编辑失败，请重试!');

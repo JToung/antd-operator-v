@@ -141,6 +141,28 @@ class View extends PureComponent {
           </a>
         );
         break;
+      case 'g':
+        return (
+          <a
+            onClick={() => {
+              this.props.history.push(`/workorder/v/view-workorder/${messageData.detailObjectId}`);
+            }}
+          >
+            查看
+          </a>
+        );
+        break;
+      case 'z':
+        return (
+          <a
+            onClick={() => {
+              this.props.history.push(`/servicer/examine/list`);
+            }}
+          >
+            查看
+          </a>
+        );
+        break;
     }
   };
 
@@ -155,12 +177,15 @@ class View extends PureComponent {
         }
         break;
       case 'o':
-        return messageData.verifiedData.changedData.categoryReason;
+        return messageData.verifiedData.reason;
         break;
       case 'I':
         return ' ';
         break;
       case 'g':
+        return messageData.reason;
+        break;
+      case 'z':
         return messageData.reason;
         break;
     }

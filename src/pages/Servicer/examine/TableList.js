@@ -159,7 +159,7 @@ class TableList extends PureComponent {
           {console.log('val', val)}
           <Divider type="vertical" />
           <Link onClick={() => this.showViewModal(val)}>查看</Link>
-          {this.getView(val)}
+          {this.getView()}
           <Divider type="vertical" />
           {this.initialValue(val)}
           <ExamineForm
@@ -230,7 +230,7 @@ class TableList extends PureComponent {
         >
           <Descriptions bordered layout="vertical">
             <Descriptions.Item label="专才ID">{Contract.servicerId}</Descriptions.Item>
-            <Descriptions.Item label="项目名称">{Contract.grade}</Descriptions.Item>
+            <Descriptions.Item label="项目名称">{Contract.itemName}</Descriptions.Item>
             <Descriptions.Item label="审核状态">
               <Badge status={statusMap[Contract.state]} text={status[Contract.state]} />
             </Descriptions.Item>

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Table, Tag, Descriptions, Badge, Card, Modal, Button, Divider } from 'antd';
+import { Table, Tag, Descriptions, Badge, Card, Modal, Button, Divider, Row, Col } from 'antd';
 import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './style.less';
@@ -212,10 +212,57 @@ class ViewItem extends PureComponent {
     });
   };
 
+  getState = state => {
+    if (state == '2') {
+      return (
+        <div>
+          <Row gutter={16}>
+            <Col lg={12} md={12} sm={24}>
+              <Button
+                type="primary"
+                onClick={() => {
+                  this.props.history.push('/workorder/v/list');
+                }}
+                className={styles.ButtonRight}
+              >
+                返回
+              </Button>
+            </Col>
+            <Col xl={{ span: 6 }} lg={{ span: 12 }} md={{ span: 12 }} sm={24}>
+              <Button
+                type="danger"
+                onClick={() => {
+                  this.props.history.push(
+                    `/workorder/v/assign-workorder/${this.props.match.params._id}`
+                  );
+                }}
+                className={styles.ButtonLeft}
+              >
+                派单
+              </Button>
+            </Col>
+          </Row>
+        </div>
+      );
+    } else {
+      return (
+        <Button
+          type="primary"
+          onClick={() => {
+            this.props.history.push('/workorder/v/list');
+          }}
+          className={styles.ButtonCenter}
+        >
+          返回
+        </Button>
+      );
+    }
+  };
+
   re = () => {
     const { workorder = {}, loading } = this.props;
-    const { partitions, Workorder, interruptData, partitionsName,log } = this.state;
-    console.log("log",log)
+    const { partitions, Workorder, interruptData, partitionsName, log } = this.state;
+    console.log('log', log);
     return (
       // 加头部
       <PageHeaderWrapper title={<FormattedMessage id="app.workorder.basic.title" />}>
@@ -248,17 +295,7 @@ class ViewItem extends PureComponent {
             </Descriptions.Item>
           </Descriptions>
           <div>
-            <Card bordered={false}>
-              <Button
-                type="primary"
-                onClick={() => {
-                  this.props.history.push('/workorder/v/list');
-                }}
-                className={styles.ButtonCenter}
-              >
-                返回
-              </Button>
-            </Card>
+            <Card bordered={false}>{this.getState(Workorder.state)}</Card>
           </div>
         </Card>
       </PageHeaderWrapper>

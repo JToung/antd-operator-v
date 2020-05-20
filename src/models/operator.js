@@ -1,4 +1,4 @@
-import { queryOperator , updateOperator , uplegalPersonPhoto} from '@/services/api';
+import { queryOperator , updateOperator , uplegalPersonPhoto , queryOperatorContract} from '@/services/api';
 
 export default {
   namespace: 'operator',
@@ -17,6 +17,7 @@ export default {
         payload: response,
       });
       console.log('response',response);
+      return response;
     },
     *upOperator({ payload }, { call, put }) {
       console.log('payload1',payload);
@@ -36,6 +37,16 @@ export default {
         payload: response,
       });
       console.log('IMGresponse1',response);
+      return response;
+    },
+    *queryContract({ payload }, { call, put }) {
+      console.log('payload1',payload);
+      const response = yield call(queryOperatorContract, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      console.log('queryOperatorContract',response);
       return response;
     },
   },

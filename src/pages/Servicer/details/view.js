@@ -161,6 +161,9 @@ class Center extends PureComponent {
   如果不存在，则是新建按钮
   */
   getContract = Contract => {
+    const {
+      form: { getFieldDecorator },
+    } = this.props;
     if (Contract._id != null) {
       return (
         <div>

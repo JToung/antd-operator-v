@@ -1,6 +1,6 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
-import { OPERATOR_URL } from '../utils/Constants';
+import { OPERATOR_URL , platform_URL } from '../utils/Constants';
 import ajax from './ajax';
 
 //查询信息
@@ -30,6 +30,12 @@ export async function setRead(params) {
 export async function queryOperator(id) {
   console.log('api', id);
   return request(`${OPERATOR_URL}/manager/queryoperator?_id=${id}`);
+}
+
+//查看运营商合约
+export async function queryOperatorContract(params) {
+  console.log('api', params);
+  return request(`${platform_URL}/platform/querycontract?${stringify(params)}`);
 }
 
 export async function updateOperator(params) {

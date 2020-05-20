@@ -8,7 +8,10 @@ import DescriptionList from '@/components/DescriptionList';
 import OPERATOR_USER from '@/utils/memoryUtils';
 import { OPERATOR_URL } from '@/utils/Constants';
 import moment from 'moment';
+import Link from 'umi/link';
 
+const statusMap = ['error', 'success'];
+const status = ['未运行', '正在运行'];
 @connect(({ operator, loading }) => ({
   operator,
   loading: loading.effects['operator/fetchOperator'],
@@ -17,8 +20,10 @@ import moment from 'moment';
 class Center extends PureComponent {
   state = {
     previewVisible: false,
+    Contract: {},
+    operator: {},
+    contractViewVisible: false,
   };
-
 
   componentDidMount() {
     const { dispatch, match } = this.props;
@@ -46,8 +51,26 @@ class Center extends PureComponent {
     dispatch({
       type: 'operator/fetchOperator',
       payload: params.id || localStorage.getItem('userId'),
+    }).then(res => {
+      console.log('res', res);
+      this.setState({ operator: res });
     });
 
+    const params2 = {
+      operatorID: localStorage.getItem('userId'),
+    };
+
+    dispatch({
+      type: 'operator/queryContract',
+      payload: params2,
+    }).then(res => {
+      console.log('queryContract', res);
+      if (res.status == '1') {
+        this.setState({ Contract: res.findResult[0] });
+      } else {
+        this.setState({ Contract: {} });
+      }
+    });
     // console.log('this.props.data',this.props.data);
   }
 
@@ -69,66 +92,143 @@ class Center extends PureComponent {
     }
   }
 
-  render() {
-    const { previewVisible, previewImage } = this.state;
-    const { operator = {}, loading } = this.props;
-    console.log('loading',loading)
-    // console.log('operator.date',operator);
-    return (
-      // 加头部
-      <Card bordered={false}>
-        <Descriptions title="运营商基础信息管理" bordered loading={loading}>
-          <Descriptions.Item label="运营商ID">{operator.data._id}</Descriptions.Item>
-          <Descriptions.Item label="运营商名">{operator.data.operatorName}</Descriptions.Item>
-          <Descriptions.Item label="系统分成">在合约表（运营商约束）中</Descriptions.Item>
-          <Descriptions.Item label="入驻时间" span={2}>
-            {moment(operator.data.operatorAddTime)
-                  .subtract(8, 'hours')
-                  .format('YYYY-MM-DD HH:mm:ss')}
-          </Descriptions.Item>
-          <Descriptions.Item label="运营商凭证"></Descriptions.Item>
-          <Descriptions.Item label="运营商简介" span={3}>
-            {operator.data.introduction}
-          </Descriptions.Item>
-          <Descriptions.Item label="运营商介绍" span={3}>
-            {operator.data.content}
-          </Descriptions.Item>
-          <Descriptions.Item label="运行状态" span={3}>
-            {this.onOperatorState(operator.data.operatorState)}
-          </Descriptions.Item>
-          <Descriptions.Item label="运营商法人">{operator.data.legalPerson}</Descriptions.Item>
-          <Descriptions.Item label="法人身份信息">
-            {operator.data.legalPersonIdNo}
-          </Descriptions.Item>
-          <Descriptions.Item label="法人联系方式">
-            {operator.data.legalPersonPhone}
-          </Descriptions.Item>
-          <Descriptions.Item label="法人证件照">
-            <img
-              alt="example"
-              style={{ width: 70, height: 70 }}
-              src={OPERATOR_URL + operator.data.legalPersonPhoto}
-            />
-          </Descriptions.Item>
-          <Descriptions.Item label="法人邮箱">{operator.data.legalPersonEmail}</Descriptions.Item>
-          <Descriptions.Item label="法人地址">{operator.data.legalPersonAdress}</Descriptions.Item>
-          <Descriptions.Item label="审核状态" span={3}>
-            {this.onExamineState(operator.data.operatorState)}
-          </Descriptions.Item>
-        </Descriptions>
-        <Card>
-          <Button
-            type="primary"
-            onClick={() => {
-              this.props.history.push('/operator/center/update');
-            }}
-            className={styles.ButtonCenter}
+  /* 
+  获取运营商合约
+  */
+  getContract = Contract => {
+    if (Contract._id != null) {
+      return (
+        <div>
+          <Link onClick={() => this.showContractViewModal()}>查看</Link>
+          <Modal
+            title="查看合约"
+            visible={this.state.contractViewVisible}
+            onOk={this.handleContractViewOk}
+            onCancel={this.handleContractViewCancel}
+            width={720}
           >
-            修改运营商信息
-          </Button>
+            <Descriptions bordered layout="vertical">
+              <Descriptions.Item label="合约名称">{Contract.contractName}</Descriptions.Item>
+              <Descriptions.Item label="合约等级">{Contract.grade}</Descriptions.Item>
+              <Descriptions.Item label="合约状态">
+                <Badge status={statusMap[Contract.state]} text={status[Contract.state]} />
+              </Descriptions.Item>
+              <Descriptions.Item label="运营商ID" span={3}>
+                {Contract.operatorID}
+              </Descriptions.Item>
+              <Descriptions.Item label="专才分成">{Contract.shar}</Descriptions.Item>
+              <Descriptions.Item label="约定最低平均用户评分">
+                {Contract.minScore}
+              </Descriptions.Item>
+              <Descriptions.Item label="最短合作时间（单位：月）">
+                {Contract.minCooperationTime}
+              </Descriptions.Item>
+              <Descriptions.Item label="约定每月最低接单数">{Contract.minOrder}</Descriptions.Item>
+              <Descriptions.Item label="保证金额">{Contract.cashDeposit}</Descriptions.Item>
+              <Descriptions.Item label="违约赔偿金额">
+                {Contract.liquidatedDamages}
+              </Descriptions.Item>
+              <Descriptions.Item label="合约信息" span={3}>
+                {Contract.content}
+              </Descriptions.Item>
+            </Descriptions>
+          </Modal>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Link disabled>不存在合约</Link>
+        </div>
+      );
+    }
+  };
+
+  //查看合约
+  handleContractViewOk = e => {
+    console.log(e);
+    this.setState({
+      contractViewVisible: false,
+    });
+  };
+
+  showContractViewModal = e => {
+    console.log(e);
+    this.setState({
+      contractViewVisible: true,
+    });
+  };
+
+  handleContractViewCancel = e => {
+    console.log(e);
+    this.setState({
+      contractViewVisible: false,
+    });
+  };
+
+  render() {
+    const { previewVisible, previewImage, Contract, operator } = this.state;
+    const { loading } = this.props;
+    console.log('loading', loading);
+    // console.log('operator.date',operator);
+    if (operator._id == null) {
+      return (
+        // 加头部
+        <Card bordered={false} />
+      );
+    } else {
+      return (
+        // 加头部
+        <Card bordered={false}>
+          <Descriptions title="运营商基础信息管理" bordered loading={loading}>
+            <Descriptions.Item label="运营商ID">{operator._id}</Descriptions.Item>
+            <Descriptions.Item label="运营商名">{operator.operatorName}</Descriptions.Item>
+            <Descriptions.Item label="运营商合约">{this.getContract(Contract)}</Descriptions.Item>
+            <Descriptions.Item label="入驻时间" span={2}>
+              {moment(operator.operatorAddTime)
+                .subtract(8, 'hours')
+                .format('YYYY-MM-DD HH:mm:ss')}
+            </Descriptions.Item>
+            <Descriptions.Item label="运营商凭证" />
+            <Descriptions.Item label="运营商简介" span={3}>
+              {operator.introduction}
+            </Descriptions.Item>
+            <Descriptions.Item label="运营商介绍" span={3}>
+              {operator.content}
+            </Descriptions.Item>
+            <Descriptions.Item label="运行状态" span={3}>
+              {this.onOperatorState(operator.operatorState)}
+            </Descriptions.Item>
+            <Descriptions.Item label="运营商法人">{operator.legalPerson}</Descriptions.Item>
+            <Descriptions.Item label="法人身份信息">{operator.legalPersonIdNo}</Descriptions.Item>
+            <Descriptions.Item label="法人联系方式">{operator.legalPersonPhone}</Descriptions.Item>
+            <Descriptions.Item label="法人证件照">
+              <img
+                alt="example"
+                style={{ width: 70, height: 70 }}
+                src={OPERATOR_URL + operator.legalPersonPhoto}
+              />
+            </Descriptions.Item>
+            <Descriptions.Item label="法人邮箱">{operator.legalPersonEmail}</Descriptions.Item>
+            <Descriptions.Item label="法人地址">{operator.legalPersonAdress}</Descriptions.Item>
+            <Descriptions.Item label="审核状态" span={3}>
+              {this.onExamineState(operator.operatorState)}
+            </Descriptions.Item>
+          </Descriptions>
+          <Card>
+            <Button
+              type="primary"
+              onClick={() => {
+                this.props.history.push('/operator/center/update');
+              }}
+              className={styles.ButtonCenter}
+            >
+              修改运营商信息
+            </Button>
+          </Card>
         </Card>
-      </Card>
-    );
+      );
+    }
   }
 }
 
