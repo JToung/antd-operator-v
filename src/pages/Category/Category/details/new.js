@@ -94,7 +94,7 @@ class New extends PureComponent {
         console.log('res', res);
         if (res != null) {
           message.success('添加成功！');
-          this.props.history.push('/category/list');
+          this.props.history.push('/category/v/list');
         } else {
           message.error('添加失败，请重试!');
         }
@@ -306,7 +306,7 @@ class New extends PureComponent {
                       htmlType="submit"
                       className={styles.ButtonLeft}
                       onClick={() => {
-                        this.props.history.push('/category/list');
+                        this.props.history.push('/category/v/list');
                       }}
                       loading={loading}
                     >

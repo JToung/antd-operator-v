@@ -69,7 +69,7 @@ class View extends PureComponent {
               <Button
                 type="primary"
                 onClick={() => {
-                  this.props.history.push('/category/list');
+                  this.props.history.push('/category/v/list');
                 }}
                 className={styles.ButtonCenter}
               >
@@ -156,7 +156,7 @@ class View extends PureComponent {
                 <Button
                   type="primary"
                   onClick={() => {
-                    this.props.history.push('/category/list');
+                    this.props.history.push('/category/v/list');
                   }}
                   className={styles.ButtonCenter}
                 >
@@ -177,7 +177,7 @@ class View extends PureComponent {
               <Button
                 type="primary"
                 onClick={() => {
-                  this.props.history.push('/category/list');
+                  this.props.history.push('/category/v/list');
                 }}
                 className={styles.ButtonCenter}
               >

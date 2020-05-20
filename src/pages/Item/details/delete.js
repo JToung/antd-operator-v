@@ -124,7 +124,7 @@ class DeleteItem extends PureComponent {
           console.log('res', res);
           if (res != null) {
             message.success('申请删除成功！');
-            this.props.history.push('/category/list');
+            this.props.history.push('/category/v/list');
           } else {
             message.error('申请删除失败，请重试!');
           }
@@ -144,7 +144,7 @@ class DeleteItem extends PureComponent {
   initialValue(category) {
     console.log('category.data.res', category.data.res);
     if (category.data.res == null) {
-      this.props.history.push('/category/list');
+      this.props.history.push('/category/v/list');
     } else if (category.data.res != null) {
       const {
         category = {},
@@ -231,7 +231,7 @@ class DeleteItem extends PureComponent {
 
   tfSJcategory(category) {
     if (category.data.res == null) {
-      this.props.history.push('/category/list');
+      this.props.history.push('/category/v/list');
     } else if (category.data.res != null) {
       const {
         category = {},
@@ -306,7 +306,7 @@ class DeleteItem extends PureComponent {
                       htmlType="submit"
                       className={styles.ButtonLeft}
                       onClick={() => {
-                        this.props.history.push('/category/list');
+                        this.props.history.push('/category/v/list');
                       }}
                       loading={loading}
                     >

@@ -126,7 +126,7 @@ class Delete extends PureComponent {
           console.log('res', res);
           if (res.status != '0') {
             message.success(res.information);
-            this.props.history.push('/category/list');
+            this.props.history.push('/category/v/list');
           } else {
             message.error(res.information);
           }
@@ -146,7 +146,7 @@ class Delete extends PureComponent {
   initialValue(category) {
     console.log('category.data.res', category.data.res);
     if (category.data.res == null) {
-      this.props.history.push('/category/list');
+      this.props.history.push('/category/v/list');
     } else if (category.data.res != null) {
       const {
         category = {},
@@ -233,7 +233,7 @@ class Delete extends PureComponent {
 
   tfSJcategory(category) {
     if (category.data.res == null) {
-      this.props.history.push('/category/list');
+      this.props.history.push('/category/v/list');
     } else if (category.data.res != null) {
       const {
         category = {},
@@ -308,7 +308,7 @@ class Delete extends PureComponent {
                       htmlType="submit"
                       className={styles.ButtonLeft}
                       onClick={() => {
-                        this.props.history.push('/category/list');
+                        this.props.history.push('/category/v/list');
                       }}
                       loading={loading}
                     >

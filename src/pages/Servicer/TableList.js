@@ -95,9 +95,7 @@ class TableList extends PureComponent {
         <Fragment>
           {console.log('val', val)}
           <Divider type="vertical" />
-          <Link to={`/servicer/view-servicer/${val._id}`}>查看</Link>
-          <Divider type="vertical" />
-          {this.initialValue(val)}
+          <Link to={`/servicer/center/view-servicer/${val._id}`}>查看</Link>
           <Divider type="vertical" />
         </Fragment>
       ),
@@ -106,14 +104,14 @@ class TableList extends PureComponent {
 
   initialValue(val) {
     if (val.state == '2') {
-      return <Link to={`/workorder/assign-workorder/${val._id}`}>审核</Link>;
+      return <Link to={`/workorder/v/assign-workorder/${val._id}`}>审核</Link>;
     } else {
       return <Link disabled>已审核</Link>;
     }
   }
 
   getServicerStatus(val){
-    if (val == 'true') {
+    if (val) {
       return <Badge status={statusMap[1]} text={status[1]} />;
     } else {
       return <Badge status={statusMap[0]} text={status[0]} />;
@@ -139,7 +137,7 @@ class TableList extends PureComponent {
     }
     const { dispatch } = this.props;
     const payload = {
-      id: localStorage.getItem('userId'),
+      operatorId: localStorage.getItem('userId'),
     };
     dispatch({
       type: 'servicer/queryServicer',
@@ -158,7 +156,7 @@ class TableList extends PureComponent {
       formValues: {},
     });
     const payload = {
-      id: localStorage.getItem('userId'),
+      operatorId: localStorage.getItem('userId'),
     };
     dispatch({
       type: 'servicer/queryServicer',
@@ -203,7 +201,7 @@ class TableList extends PureComponent {
       console.log('payload', payload);
       const payload = {
         ...values,
-        id: localStorage.getItem('userId'),
+        operatorId: localStorage.getItem('userId'),
       };
       dispatch({
         type: 'servicer/queryServicer',

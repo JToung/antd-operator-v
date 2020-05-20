@@ -101,10 +101,10 @@ class UPOROFF extends PureComponent {
           if (res != null) {
             if (res.upInstance.changedData.categoryState == '0') {
               message.success('申请上架成功！');
-              this.props.history.push('/category/list');
+              this.props.history.push('/category/v/list');
             } else if (res.upInstance.changedData.categoryState == '1') {
               message.success('申请下架成功！');
-              this.props.history.push('/category/list');
+              this.props.history.push('/category/v/list');
             }
           } else {
             if (res.upInstance.changedData.categoryState == '0') {
@@ -129,7 +129,7 @@ class UPOROFF extends PureComponent {
   initialValue(category) {
     console.log('category.data.res', category.data.res);
     if (category.data.res == null) {
-      this.props.history.push('/category/list');
+      this.props.history.push('/category/v/list');
     } else if (category.data.res != null) {
       const {
         category = {},
@@ -216,7 +216,7 @@ class UPOROFF extends PureComponent {
 
   tfSJcategory(category) {
     if (category.data.res == null) {
-      this.props.history.push('/category/list');
+      this.props.history.push('/category/v/list');
     } else if (category.data.res != null) {
       const {
         category = {},
@@ -279,7 +279,7 @@ class UPOROFF extends PureComponent {
 
   tfSJcategoryName(category) {
     if (category.data.res == null) {
-      this.props.history.push('/category/list');
+      this.props.history.push('/category/v/list');
     } else if (category.data.res != null) {
       if (category.data.res[0].categoryState == '1') {
         const Name = "下架品类包";
@@ -293,7 +293,7 @@ class UPOROFF extends PureComponent {
 
   tfSJcategoryButton(category) {
     if (category.data.res == null) {
-      this.props.history.push('/category/list');
+      this.props.history.push('/category/v/list');
     } else if (category.data.res != null) {
       if (category.data.res[0].categoryState == '1') {
         const Name = "确认下架";
@@ -342,7 +342,7 @@ class UPOROFF extends PureComponent {
                       htmlType="submit"
                       className={styles.ButtonLeft}
                       onClick={() => {
-                        this.props.history.push('/category/list');
+                        this.props.history.push('/category/v/list');
                       }}
                       loading={loading}
                     >

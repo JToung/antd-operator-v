@@ -2,7 +2,8 @@ import {
     queryWorkorder,
     queryPartition,
     queryAssign,
-    assignPost
+    assignPost,
+    queryLog
   } from '@/services/api';
   
   export default {
@@ -52,6 +53,16 @@ import {
           payload: response,
         });
         console.log('assignPost', response);
+        return response;
+      },
+      *queryLog({ payload }, { call, put }) {
+        console.log('payload', payload);
+        const response = yield call(queryLog, payload);
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+        console.log('queryLog', response);
         return response;
       },
     },

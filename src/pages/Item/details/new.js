@@ -1009,7 +1009,7 @@ class NewItem extends PureComponent {
             });
           });
           message.success('添加成功！');
-          this.props.history.push('/item/list');
+          this.props.history.push('/item/v/list');
         } else {
           message.error('添加失败，请重试!');
         }
@@ -1091,7 +1091,7 @@ class NewItem extends PureComponent {
                       htmlType="submit"
                       className={styles.ButtonLeft}
                       onClick={() => {
-                        this.props.history.push('/item/list');
+                        this.props.history.push('/item/v/list');
                       }}
                     >
                       返回首页

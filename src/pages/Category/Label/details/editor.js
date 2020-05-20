@@ -326,7 +326,7 @@ class Editor extends PureComponent {
                     })(
                       <Input.TextArea
                         style={{ minHeight: 32 }}
-                        placeholder={operator.data.operatorIntroduction}
+                        placeholder={operator.data.introduction}
                         rows={4}
                       />
                     )}
@@ -346,7 +346,7 @@ class Editor extends PureComponent {
                     })(
                       <Input.TextArea
                         style={{ minHeight: 32 }}
-                        placeholder={operator.data.operatorIntroduction}
+                        placeholder={operator.data.introduction}
                         rows={4}
                       />
                     )}
@@ -366,7 +366,7 @@ class Editor extends PureComponent {
                     })(
                       <Input.TextArea
                         style={{ minHeight: 32 }}
-                        placeholder={operator.data.operatorIntroduction}
+                        placeholder={operator.data.introduction}
                         rows={4}
                       />
                     )}

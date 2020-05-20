@@ -96,7 +96,7 @@ class TableListWorkorder extends PureComponent {
         <Fragment>
           {console.log('val', val)}
           <Divider type="vertical" />
-          <Link to={`/workorder/view-workorder/${val._id}`}>查看</Link>
+          <Link to={`/workorder/v/view-workorder/${val._id}`}>查看</Link>
           <Divider type="vertical" />
           {this.initialValue(val)}
           <Divider type="vertical" />
@@ -107,7 +107,7 @@ class TableListWorkorder extends PureComponent {
 
   initialValue(val) {
     if (val.state == '2') {
-      return <Link to={`/workorder/assign-workorder/${val._id}`}>派单</Link>;
+      return <Link to={`/workorder/v/assign-workorder/${val._id}`}>派单</Link>;
     } else {
       return <Link disabled>已派单</Link>;
     }

@@ -185,9 +185,13 @@ class ViewItem extends PureComponent {
         type: 'category/fetchCategory',
         payload,
       }).then(res => {
-        const categoryName = res.res[0].categoryName;
-        this.setState({ categoryName: categoryName });
-        console.log('categoryName', this.state.categoryName);
+        if(res.res.length != 0){
+          const categoryName = res.res[0].categoryName;
+          this.setState({ categoryName: categoryName });
+          console.log('categoryName', this.state.categoryName);
+        }else{
+          this.setState({ categoryName: "品类可能被删除" });
+        }        
       });
       console.log('res:', Item);
       console.log('res:', interruptData);
@@ -278,7 +282,7 @@ class ViewItem extends PureComponent {
               <Button
                 type="primary"
                 onClick={() => {
-                  this.props.history.push('/item/list');
+                  this.props.history.push('/item/v/list');
                 }}
                 className={styles.ButtonCenter}
               >
@@ -298,7 +302,7 @@ class ViewItem extends PureComponent {
     console.log('Item', Item);
     if (Item[0] == null) {
       if (this.props.match.params._id == null) {
-        this.props.history.push('/item/list');
+        this.props.history.push('/item/v/list');
       } else {
         return <div>{this.re()}</div>;
       }

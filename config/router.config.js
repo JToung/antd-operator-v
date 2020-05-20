@@ -58,47 +58,53 @@ export default [
         path: '/category',
         name: 'category',
         icon: 'profile',
-        component: './Category/Category/category',
-        hideChildrenInMenu: true,
         routes: [
-          {
-            path: '/category',
-            redirect: '/category/info',
-          },
           {
             path: '/category/info',
             name: 'info',
             component: './Category/Category/analysis',
           },
           {
-            path: '/category/list',
-            name: 'list',
-            component: './Category/Category/category-list',
-          },
-          {
-            path: '/category/view-categroy/:_id',
-            name: 'view-categroy',
-            component: './Category/Category/details/view',
-          },
-          {
-            path: '/category/delete-categroy/:_id',
-            name: 'delete-categroy',
-            component: './Category/Category/details/delete',
-          },
-          {
-            path: '/category/editor-categroy/:_id',
-            name: 'editor-categroy',
-            component: './Category/Category/details/editor',
-          },
-          {
-            path: '/category/new-categroy',
-            name: 'new-categroy',
-            component: './Category/Category/details/new',
-          },
-          {
-            path: '/category/uporoff-categroy/:_id',
-            name: 'uporoff-categroy',
-            component: './Category/Category/details/uporoff',
+            path: '/category/v',
+            name: 'v',
+            component: './Category/Category/category',
+            hideChildrenInMenu: true,
+            routes: [
+              {
+                path: '/category/v',
+                redirect: '/category/v/list',
+              },
+              {
+                path: '/category/v/list',
+                name: 'list',
+                component: './Category/Category/category-list',
+              },
+              {
+                path: '/category/v/view-categroy/:_id',
+                name: 'view-categroy',
+                component: './Category/Category/details/view',
+              },
+              {
+                path: '/category/v/delete-categroy/:_id',
+                name: 'delete-categroy',
+                component: './Category/Category/details/delete',
+              },
+              {
+                path: '/category/v/editor-categroy/:_id',
+                name: 'editor-categroy',
+                component: './Category/Category/details/editor',
+              },
+              {
+                path: '/category/v/new-categroy',
+                name: 'new-categroy',
+                component: './Category/Category/details/new',
+              },
+              {
+                path: '/category/v/uporoff-categroy/:_id',
+                name: 'uporoff-categroy',
+                component: './Category/Category/details/uporoff',
+              },
+            ],
           },
         ],
       },
@@ -106,47 +112,53 @@ export default [
         path: '/item',
         name: 'item',
         icon: 'profile',
-        component: './Item/item',
-        hideChildrenInMenu: true,
         routes: [
-          {
-            path: '/item',
-            redirect: '/item/info',
-          },
           {
             path: '/item/info',
             name: 'info',
             component: './Item/analysis',
           },
           {
-            path: '/item/list',
-            name: 'list',
-            component: './Item/item-list',
-          },
-          {
-            path: '/item/view-item/:_id',
-            name: 'view-item',
-            component: './Item/details/view',
-          },
-          {
-            path: '/item/delete-item/:_id',
-            name: 'delete-item',
-            component: './Item/details/delete',
-          },
-          {
-            path: '/item/editor-item/:_id',
-            name: 'editor-item',
-            component: './Item/details/editor',
-          },
-          {
-            path: '/item/new-item',
-            name: 'new-item',
-            component: './Item/details/new',
-          },
-          {
-            path: '/item/uporoff-item/:_id',
-            name: 'uporoff-item',
-            component: './Item/details/uporoff',
+            path: '/item/v',
+            name: 'v',
+            component: './Item/item',
+            hideChildrenInMenu: true,
+            routes: [
+              {
+                path: '/item/v',
+                redirect: '/item/v/list',
+              },
+              {
+                path: '/item/v/list',
+                name: 'list',
+                component: './Item/item-list',
+              },
+              {
+                path: '/item/v/view-item/:_id',
+                name: 'view-item',
+                component: './Item/details/view',
+              },
+              {
+                path: '/item/v/delete-item/:_id',
+                name: 'delete-item',
+                component: './Item/details/delete',
+              },
+              {
+                path: '/item/v/editor-item/:_id',
+                name: 'editor-item',
+                component: './Item/details/editor',
+              },
+              {
+                path: '/item/v/new-item',
+                name: 'new-item',
+                component: './Item/details/new',
+              },
+              {
+                path: '/item/v/uporoff-item/:_id',
+                name: 'uporoff-item',
+                component: './Item/details/uporoff',
+              },
+            ],
           },
         ],
       },
@@ -154,32 +166,38 @@ export default [
         path: '/workorder',
         name: 'workorder',
         icon: 'profile',
-        component: './Workorder/workorder',
-        hideChildrenInMenu: true,
         routes: [
-          {
-            path: '/workorder',
-            redirect: '/workorder/info',
-          },
           {
             path: '/workorder/info',
             name: 'info',
             component: './Workorder/analysis',
           },
           {
-            path: '/workorder/list',
-            name: 'list',
-            component: './Workorder/work-list',
-          },
-          {
-            path: '/workorder/view-workorder/:_id',
-            name: 'view-workorder',
-            component: './Workorder/details/view',
-          },
-          {
-            path: '/workorder/assign-workorder/:_id',
-            name: 'assign-workorder',
-            component: './Workorder/details/assign',
+            path: '/workorder/v',
+            name: 'v',
+            component: './Workorder/workorder',
+            hideChildrenInMenu: true,
+            routes: [
+              {
+                path: '/workorder/v',
+                redirect: '/workorder/v/list',
+              },
+              {
+                path: '/workorder/v/list',
+                name: 'list',
+                component: './Workorder/work-list',
+              },
+              {
+                path: '/workorder/v/view-workorder/:_id',
+                name: 'view-workorder',
+                component: './Workorder/details/view',
+              },
+              {
+                path: '/workorder/v/assign-workorder/:_id',
+                name: 'assign-workorder',
+                component: './Workorder/details/assign',
+              },
+            ],
           },
         ],
       },
@@ -187,27 +205,50 @@ export default [
         path: '/servicer',
         name: 'servicer',
         icon: 'profile',
-        component: './Servicer/servicer',
-        hideChildrenInMenu: true,
         routes: [
-          {
-            path: '/servicer',
-            redirect: '/servicer/info',
-          },
           {
             path: '/servicer/info',
             name: 'info',
             component: './Servicer/analysis',
           },
           {
-            path: '/servicer/list',
-            name: 'list',
-            component: './Servicer/servicer-list',
+            path: '/servicer/center',
+            name: 'center',
+            component: './Servicer/servicer',
+            hideChildrenInMenu: true,
+            routes: [
+              {
+                path: '/servicer/center',
+                redirect: '/servicer/center/list',
+              },
+              {
+                path: '/servicer/center/list',
+                name: 'list',
+                component: './Servicer/servicer-list',
+              },
+              {
+                path: '/servicer/center/view-servicer/:_id',
+                name: 'view-servicer',
+                component: './Servicer/details/view',
+              },
+            ],
           },
           {
-            path: '/servicer/view-servicer/:_id',
-            name: 'view-servicer',
-            component: './Servicer/details/view',
+            path: '/servicer/examine',
+            name: 'examine',
+            component: './Servicer/examine/servicer-list',
+            hideChildrenInMenu: true,
+            routes: [
+              {
+                path: '/servicer/examine',
+                redirect: '/servicer/examine/list',
+              },
+              {
+                path: '/servicer/examine/list',
+                name: 'list',
+                component: './Servicer/examine/servicer-list',
+              },
+            ],
           },
         ],
       },

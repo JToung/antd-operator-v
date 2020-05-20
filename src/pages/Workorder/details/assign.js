@@ -178,7 +178,7 @@ class TableListAssign extends PureComponent {
     }).then(res => {
       if (res.status == '1') {
         message.success(res.information);
-        this.props.history.push('/workorder/list');
+        this.props.history.push('/workorder/v/list');
       } else {
         message.success(res.information);
       }

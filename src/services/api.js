@@ -34,7 +34,7 @@ export async function queryOperator(id) {
 
 export async function updateOperator(params) {
   console.log('api1', params);
-  return request(`${OPERATOR_URL}/manager/updateoperator?_id=${params.id}`, {
+  return request(`${OPERATOR_URL}/manager/updateoperator?operatorId=${params.id}`, {
     method: 'POST',
     body: params,
   });
@@ -117,10 +117,44 @@ export async function assignPost(params) {
   });
 }
 
+//查看任务分区 传入工单id
+export async function queryLog(params) {
+  console.log('api', params);
+  return request(`${OPERATOR_URL}/manager/checklog?${stringify(params)}`);
+}
+
 //查看专才列表
 export async function queryServicer(params) {
   console.log('api', params);
-  return request(`${OPERATOR_URL}/manager/queryservicer?operatorId=${params.id}`);
+  return request(`${OPERATOR_URL}/manager/queryservicer?${stringify(params)}`);
+}
+
+//查看专才审核列表
+export async function queryApply(params) {
+  console.log('api', params);
+  return request(`${OPERATOR_URL}/manager/queryapply?${stringify(params)}`);
+}
+
+//处理专才审核
+export async function verifyServicer(params) {
+  return request(`${OPERATOR_URL}/manager/verifyservicer?operatorId=${params.operatorId}`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+//查看专才合约
+export async function queryContract(params) {
+  console.log('api', params);
+  return request(`${OPERATOR_URL}/manager/querycontract?${stringify(params)}`);
+}
+
+//添加专才合约
+export async function addContract(params) {
+  return request(`${OPERATOR_URL}/manager/addcontract`, {
+    method: 'POST',
+    body: params,
+  });
 }
 
 //查看运营商列表

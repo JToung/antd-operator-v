@@ -88,7 +88,7 @@ class Center extends PureComponent {
           </Descriptions.Item>
           <Descriptions.Item label="运营商凭证"></Descriptions.Item>
           <Descriptions.Item label="运营商简介" span={3}>
-            {operator.data.operatorIntroduction}
+            {operator.data.introduction}
           </Descriptions.Item>
           <Descriptions.Item label="运营商介绍" span={3}>
             {operator.data.content}

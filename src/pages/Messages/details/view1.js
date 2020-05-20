@@ -75,13 +75,13 @@ class View1 extends PureComponent {
   getLable = item => {
     switch (item.verifiedData.object) {
       case 'c':
-        return <Link to={`/category/view-categroy/${item.verifiedData.id}`}>查看</Link>;
+        return <Link to={`/category/v/view-categroy/${item.verifiedData.id}`}>查看</Link>;
         break;
       case 'o':
         return <Link to={`operator/center/info`}>查看</Link>;
         break;
       case 'I':
-        return <Link to={`/item/view-item/${item.verifiedData.id}`}>查看</Link>;
+        return <Link to={`/item/v/view-item/${item.verifiedData.id}`}>查看</Link>;
         break;
     }
   };
@@ -138,7 +138,7 @@ class View1 extends PureComponent {
               <Button
                 type="primary"
                 onClick={() => {
-                  this.props.history.push('/category/list');
+                  this.props.history.push('/messages');
                 }}
                 className={styles.ButtonCenter}
               >

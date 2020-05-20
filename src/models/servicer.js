@@ -1,4 +1,4 @@
-import { queryServicer , updateOperator , uplegalPersonPhoto} from '@/services/api';
+import { queryServicer , queryContract , addContract, verifyServicer, queryApply} from '@/services/api';
 
 export default {
   namespace: 'servicer',
@@ -19,16 +19,46 @@ export default {
       console.log('response',response);
       return response
     },
-    // *upOperator({ payload }, { call, put }) {
-    //   console.log('payload1',payload);
-    //   const response = yield call(updateOperator, payload);
-    //   yield put({
-    //     type: 'save',
-    //     payload: response,
-    //   });
-    //   console.log('response1',response);
-    //   return response;
-    // },
+    *queryContract({ payload }, { call, put }) {
+      console.log('payload1',payload);
+      const response = yield call(queryContract, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      console.log('response1',response);
+      return response;
+    },
+    *addContract({ payload }, { call, put }) {
+      console.log('addContractpayload1',payload);
+      const response = yield call(addContract, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      console.log('addContract',response);
+      return response;
+    },
+    *queryApply({ payload }, { call, put }) {
+      console.log('payload1',payload);
+      const response = yield call(queryApply, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      console.log('queryApply',response);
+      return response;
+    },
+    *verifyServicer({ payload }, { call, put }) {
+      console.log('verifyServicerpayload1',payload);
+      const response = yield call(verifyServicer, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      console.log('verifyServicer',response);
+      return response;
+    },
     // *uplegalPersonPhoto({ payload }, { call, put }) {
     //   console.log('saveIMG',payload);
     //   const response = yield call(uplegalPersonPhoto, payload);

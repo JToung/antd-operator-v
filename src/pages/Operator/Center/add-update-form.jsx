@@ -92,7 +92,7 @@ class AddUpdateForm extends Component {
                 })(
                   <Input.TextArea
                     style={{ minHeight: 32 }}
-                    placeholder={operator.data.operatorIntroduction}
+                    placeholder={operator.data.introduction}
                     rows={2}
                   />
                 )}

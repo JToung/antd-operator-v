@@ -185,8 +185,8 @@ class Update extends PureComponent {
           <Row gutter={16}>
             <Col lg={24} md={12} sm={24}>
               <Form.Item label="运营商简介">
-                {getFieldDecorator('operatorIntroduction', {
-                  initialValue: operator.data.operatorIntroduction,
+                {getFieldDecorator('introduction', {
+                  initialValue: operator.data.introduction,
                   rules: [
                     {
                       required: true,

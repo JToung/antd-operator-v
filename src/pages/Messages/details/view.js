@@ -76,7 +76,7 @@ class View extends PureComponent {
       return <Badge status="success" text="通过" />;
     } else if (val == '2') {
       return <Badge status="error" text="未通过" />;
-    }else {
+    } else {
       return (
         <div>
           <Badge status="warning" text="未处理" />
@@ -112,7 +112,7 @@ class View extends PureComponent {
         return (
           <a
             onClick={() => {
-              this.props.history.push(`/category/view-categroy/${messageData.detailObjectId}`);
+              this.props.history.push(`/category/v/view-categroy/${messageData.detailObjectId}`);
             }}
           >
             查看
@@ -134,7 +134,7 @@ class View extends PureComponent {
         return (
           <a
             onClick={() => {
-              this.props.history.push(`/item/view-item/${messageData.detailObjectId}`);
+              this.props.history.push(`/item/v/view-item/${messageData.detailObjectId}`);
             }}
           >
             查看
@@ -148,9 +148,9 @@ class View extends PureComponent {
     const { messageData } = this.state;
     switch (messageData.detailObject) {
       case 'c':
-        if(messageData.object == 'o'){
+        if (messageData.object == 'o') {
           return messageData.verifiedData.changedData.categoryReason;
-        }else if(messageData.object == 'p'){
+        } else if (messageData.object == 'p') {
           return messageData.verifiedData.reason;
         }
         break;
@@ -158,7 +158,10 @@ class View extends PureComponent {
         return messageData.verifiedData.changedData.categoryReason;
         break;
       case 'I':
-        return " ";
+        return ' ';
+        break;
+      case 'g':
+        return messageData.reason;
         break;
     }
   };
@@ -187,7 +190,7 @@ class View extends PureComponent {
                 {this.getAction(messageData)}
               </Descriptions.Item>
               <Descriptions.Item label="消息内容" span={3}>
-              {this.getReason()}
+                {this.getReason()}
               </Descriptions.Item>
               <Descriptions.Item label="具体信息" span={3}>
                 {this.getLable()}
@@ -216,7 +219,7 @@ class View extends PureComponent {
               <Button
                 type="primary"
                 onClick={() => {
-                  this.props.history.push('/category/list');
+                  this.props.history.push('/messages');
                 }}
                 className={styles.ButtonCenter}
               >

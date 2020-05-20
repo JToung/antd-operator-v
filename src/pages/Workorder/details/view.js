@@ -11,6 +11,8 @@ import Link from 'umi/link';
 
 const statusMap = ['red', 'green', 'yellow', 'cyan', 'geekblue', 'lime'];
 const status = ['结束', '进行中', '待分配', '用户终止', '等待启动', '已派单未进行'];
+const statusLogMap = ['yellow', 'green', 'lime', 'red'];
+const statusLog = ['任务未开始', '任务进行中', '任务完成', '任务终止'];
 @connect(({ item, loading }) => ({
   item,
   loading: loading.effects['workorder'],
@@ -22,55 +24,72 @@ class ViewItem extends PureComponent {
 
     this.logColumns = [
       {
-        title: '单品分区ID',
+        title: '任务日志ID',
         dataIndex: '_id',
         key: '_id',
       },
       {
-        title: '单品分区名称',
+        title: '任务日志名',
         dataIndex: 'name',
         key: 'name',
       },
       {
-        title: '单品分区价格',
-        dataIndex: 'price',
-        key: 'price',
+        title: '任务开始时间',
+        dataIndex: 'start',
+        key: 'start',
       },
       {
-        title: '单品应用场景',
-        dataIndex: 'applicable',
-        key: 'applicable',
+        title: '任务完成时间',
+        dataIndex: 'end',
+        key: 'end',
+      },
+      {
+        title: '任务状态',
+        dataIndex: 'state',
+        key: 'state',
+        render(val) {
+          return <Badge status={statusLogMap[val]} text={statusLog[val]} />;
+        },
       },
       {
         title: '操作',
         render: (text, record) =>
-          this.state.partitions.length >= 1 ? (
+          this.state.log.length >= 1 ? (
             <div>
-              {console.log('view', this.state.View)}
-              {console.log('record', record)}
-              <Link onClick={() => this.showPartitionViewModal(record._id)}>查看</Link>
+              {console.log('record', record.name)}
+              <Link onClick={() => this.showLogViewModal(record._id)}>查看</Link>
               <Modal
-                title="查看单品分区"
-                visible={this.state.partitionViewVisible}
-                onOk={this.handlePartitionViewOk}
-                onCancel={this.handlePartitionViewCancel}
+                title="查看任务详情"
+                visible={this.state.logViewVisible}
+                onOk={this.handleLogViewOk}
+                onCancel={this.handleLogCancel}
                 width={720}
               >
                 <Descriptions bordered layout="vertical">
-                  <Descriptions.Item label="单品分区名">{record.name}</Descriptions.Item>
-                  <Descriptions.Item label="价格">{record.price}</Descriptions.Item>
-                  <Descriptions.Item label="单品应用场景">{record.applicable}</Descriptions.Item>
-                  <Descriptions.Item label="风格">{record.style}</Descriptions.Item>
-                  <Descriptions.Item label="行业">{record.industry}</Descriptions.Item>
-                  <Descriptions.Item label="类型">{record.type}</Descriptions.Item>
-                  <Descriptions.Item label="单品分区简介" span={3}>
-                    {record.introduction}
+                  <Descriptions.Item label="任务日志id" span={2}>
+                    {record._id}
                   </Descriptions.Item>
-                  <Descriptions.Item label="细节" span={3}>
-                    {record.detail}
+                  <Descriptions.Item label="任务日志名">{record.name}</Descriptions.Item>
+                  <Descriptions.Item label="任务状态" span={3}>
+                    <Badge status={statusLogMap[record.state]} text={statusLog[record.state]} />
                   </Descriptions.Item>
-                  <Descriptions.Item label="单品任务" span={3}>
-                    <Table bordered dataSource={this.state.Task} columns={this.taskInstance} />
+                  <Descriptions.Item label="任务起始时间" span={3}>
+                    {record.start}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="任务结束时间" span={3}>
+                    {record.end}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="日志简介简介" span={3}>
+                    {record.content}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="专才反馈" span={3}>
+                    {record.Servicerfeedback}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="图片反馈" span={3}>
+                    {record.serverFeedbackImg}待修改成图片
+                  </Descriptions.Item>
+                  <Descriptions.Item label="客户反馈" span={3}>
+                    {record.Customerfeedback}
                   </Descriptions.Item>
                 </Descriptions>
               </Modal>
@@ -95,6 +114,8 @@ class ViewItem extends PureComponent {
       categoryName: '',
       //任务表汇总
       log: [],
+      logTask: [],
+      logViewVisible: false,
       //所属品类名
       categoryName: '',
     };
@@ -131,12 +152,22 @@ class ViewItem extends PureComponent {
       const params1 = {
         id: res.findResult[0].itemPartition,
       };
-      console.log(params1)
+      console.log(params1);
       dispatch({
         type: 'workorder/queryPartition',
         payload: params1,
       }).then(res => {
         this.setState({ partitionsName: res.findResult.name });
+      });
+      const params2 = {
+        workorderId: res.findResult[0]._id,
+      };
+      dispatch({
+        type: 'workorder/queryLog',
+        payload: params2,
+      }).then(res => {
+        this.setState({ log: res.workorderLogs });
+        console.log('res.workorderLogs', res.workorderLogs);
       });
     });
   }
@@ -145,45 +176,46 @@ class ViewItem extends PureComponent {
     return <Badge color={statusMap[state]} text={status[state]} />;
   }
 
-  //查看单品分区
-  handlePartitionViewOk = e => {
+  //查看任务分区
+  handleLogViewOk = e => {
     console.log(e);
     this.setState({
-      partitionViewVisible: false,
+      logViewVisible: false,
     });
   };
 
-  showPartitionViewModal = keyView => {
+  showLogViewModal = keyView => {
     this.setState({ keyView: keyView });
     console.log('keyEditor', keyView);
     const { dispatch } = this.props;
 
     const params = {
-      id: keyView,
+      _id: keyView,
     };
     dispatch({
-      type: 'item/fetchTask',
+      type: 'workorder/queryLog',
       payload: params,
     }).then(res => {
-      const Task = res.findResult;
-      this.setState({ Task: Task });
+      this.setState({ logTask: res.workorderLogs });
+      console.log('logTask', res.workorderLogs);
     });
 
     this.setState({
-      partitionViewVisible: true,
+      logViewVisible: true,
     });
   };
 
-  handlePartitionViewCancel = e => {
+  handleLogViewCancel = e => {
     console.log(e);
     this.setState({
-      partitionViewVisible: false,
+      logViewVisible: false,
     });
   };
 
   re = () => {
     const { workorder = {}, loading } = this.props;
-    const { partitions, Workorder, interruptData, partitionsName } = this.state;
+    const { partitions, Workorder, interruptData, partitionsName,log } = this.state;
+    console.log("log",log)
     return (
       // 加头部
       <PageHeaderWrapper title={<FormattedMessage id="app.workorder.basic.title" />}>
@@ -203,7 +235,7 @@ class ViewItem extends PureComponent {
               {Workorder.servicer}
             </Descriptions.Item>
             <Descriptions.Item label="服务启动时间" span={3}>
-            {moment(Workorder.serverTime).format('YYYY-MM-DD HH:mm:ss')}
+              {moment(Workorder.serverTime).format('YYYY-MM-DD HH:mm:ss')}
             </Descriptions.Item>
             <Descriptions.Item label="客户要求" span={3}>
               {Workorder.requirement}
@@ -211,13 +243,16 @@ class ViewItem extends PureComponent {
             <Descriptions.Item label="客户电话" span={3}>
               {Workorder.customerPhone}
             </Descriptions.Item>
+            <Descriptions.Item label="工单任务日志" span={3}>
+              <Table bordered dataSource={log} columns={this.logColumns} />
+            </Descriptions.Item>
           </Descriptions>
           <div>
             <Card bordered={false}>
               <Button
                 type="primary"
                 onClick={() => {
-                  this.props.history.push('/workorder/list');
+                  this.props.history.push('/workorder/v/list');
                 }}
                 className={styles.ButtonCenter}
               >
@@ -237,7 +272,7 @@ class ViewItem extends PureComponent {
     console.log('workorder', Workorder);
     if (Workorder == null) {
       if (this.props.match.params._id == null) {
-        this.props.history.push('/workorder/list');
+        this.props.history.push('/workorder/v/list');
       } else {
         return <div>{this.re()}</div>;
       }

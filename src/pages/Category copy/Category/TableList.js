@@ -99,11 +99,11 @@ class TableList extends PureComponent {
       render: val => (
         <Fragment>
           {console.log('val',val)}
-          <Link to={`/category/editor-categroy/${val._id}`}>编辑</Link>
+          <Link to={`/category/v/editor-categroy/${val._id}`}>编辑</Link>
           <Divider type="vertical" />
-          <Link to={`/category/view-categroy/${val._id}`}>查看</Link>
+          <Link to={`/category/v/view-categroy/${val._id}`}>查看</Link>
           <Divider type="vertical" />
-          <Link to={`/category/delete-categroy/${val._id}`}>删除</Link>
+          <Link to={`/category/v/delete-categroy/${val._id}`}>删除</Link>
           <Divider type="vertical" />
           {this.initialValue(val)}
         </Fragment>
@@ -113,9 +113,9 @@ class TableList extends PureComponent {
 
   initialValue(val){
     if(val.categoryState =="0"){
-      return <Link to={`/category/uporoff-categroy/${val._id}`}>上架</Link>
+      return <Link to={`/category/v/uporoff-categroy/${val._id}`}>上架</Link>
     }else if(val.categoryState =="1"){
-      return <Link to={`/category/uporoff-categroy/${val._id}`}>下架</Link>
+      return <Link to={`/category/v/uporoff-categroy/${val._id}`}>下架</Link>
     }
   }
 
@@ -269,7 +269,7 @@ class TableList extends PureComponent {
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
             <div className={styles.tableListOperator}>
-              <Link to="/category/new-categroy">
+              <Link to="/category/v/new-categroy">
                 <Button icon="plus" type="primary">
                   {console.log(this.props.history)}
                   新建

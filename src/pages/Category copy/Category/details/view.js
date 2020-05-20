@@ -59,7 +59,7 @@ class View extends PureComponent {
     const { category = {}, loading } = this.props;
     // console.log('operator.date',operator);
     if (category.data.res == null) {
-      this.props.history.push('/category/list');
+      this.props.history.push('/category/v/list');
     } else{
       return (
         // 加头部
@@ -111,7 +111,7 @@ class View extends PureComponent {
               <Button
                 type="primary"
                 onClick={() => {
-                  this.props.history.push('/category/list');
+                  this.props.history.push('/category/v/list');
                 }}
                 className={styles.ButtonCenter}
               >
