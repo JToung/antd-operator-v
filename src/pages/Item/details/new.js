@@ -11,6 +11,7 @@ import {
   Descriptions,
   Badge,
   Card,
+  Icon,
   Button,
   Divider,
   Tooltip,
@@ -30,6 +31,8 @@ import memoryUtils from '@/utils/memoryUtils';
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
+import { OPERATOR_URL } from '@/utils/Constants';
+// import ItemPhoto from './ItemPhoto';
 
 const { Column, ColumnGroup } = Table;
 const EditableContext = React.createContext();
@@ -115,6 +118,15 @@ class EditableCell extends React.Component {
       </td>
     );
   }
+}
+
+function getBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
 }
 
 @connect(({ item, loading }) => ({
@@ -413,6 +425,9 @@ class NewItem extends PureComponent {
       interruptData: [],
       stage: [],
       interruptCount: 0,
+      previewVisible: false,
+      previewImage: '',
+      fileList: [],
       //分区汇总
       partitions: [],
       partitionCount: 0,
@@ -774,7 +789,7 @@ class NewItem extends PureComponent {
 
   handlePartitionOk = e => {
     const { partitionCount, partitions } = this.state;
-    this.props.form.validateFields((err, values) => {
+    this.props.form.validateFields((err, values) => {  
       const newData = {
         key: partitionCount,
         name: values.name,
@@ -930,17 +945,42 @@ class NewItem extends PureComponent {
       </div>
     );
   };
+
+  //图片
+  handleIMGCancel = () => this.setState({ previewVisible: false });
+
+  handleIMGPreview = async file => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+
+    this.setState({
+      previewImage: file.url || file.preview,
+      previewVisible: true,
+    });
+  };
+
+  handleIMGChange = ({ fileList }) => {
+    console.log('fileList', this.state.fileList);
+    this.setState({ fileList });
+  };
+
   handleSubmit = e => {
     const { dispatch, match } = this.props;
     const { params } = match;
+    const { fileList } = this.state;
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
+      const img = fileList.map(fileList => {
+        fileList.response
+      })
       const payload = {
         ...values,
         itemAddTime: new Date().getTime(),
         operatorID: localStorage.getItem('userId'),
         itemState: '0',
         itemExamineTF: '0',
+        imgList: img,
       };
 
       console.log('values', values);
@@ -952,19 +992,23 @@ class NewItem extends PureComponent {
       //   console.log('receive the value of input ' + values);
       // }
       console.log('参数', payload);
-
+      let formData = new FormData();
+      // fields 是表單內容，將它 append 到 formData
+      Object.keys(payload).map(item => {
+        formData.append(item, payload[item]);
+      });
       dispatch({
         type: 'item/addItem',
-        payload,
+        payload: formData,
       }).then(res => {
         console.log('res', res);
         if (res != null) {
           this.state.interruptData.map(interrupt => {
             const interruptD = {
               ...interrupt,
-              itemId: res.ensure._id,
+              itemId: res.addResult._id,
             };
-            console.log('itemId: ',res.ensure._id)
+            console.log('itemId: ', res.addResult._id);
             console.log('interruptD', interruptD);
             dispatch({
               type: 'item/addInterrupt',
@@ -981,9 +1025,9 @@ class NewItem extends PureComponent {
               type: partition.type,
               style: partition.style,
               industry: partition.industry,
-              itemID: res.ensure._id,
+              itemID: res.addResult._id,
             };
-            console.log('itemId: ',res.ensure._id)
+            console.log('itemId: ', res.addResult._id);
             console.log('partitionsD', partitionsD);
             dispatch({
               type: 'item/addPartition',
@@ -999,7 +1043,7 @@ class NewItem extends PureComponent {
                   partitionId: res.partitionInstance._id,
                   order: task.order,
                 };
-                console.log('partitionId: ',res.partitionInstance._id)
+                console.log('partitionId: ', res.partitionInstance._id);
                 console.log('taskD', taskD);
                 dispatch({
                   type: 'item/addTask',
@@ -1021,8 +1065,13 @@ class NewItem extends PureComponent {
     const {
       form: { getFieldDecorator },
     } = this.props;
-    const { interruptData } = this.state;
-
+    const uploadButton = (
+      <div>
+        <Icon type="plus" />
+        <div className="ant-upload-text">上传</div>
+      </div>
+    );
+    const { interruptData, previewVisible, previewImage, fileList } = this.state;
     console.log('interruptData: ', interruptData);
     return (
       // 加头部
@@ -1059,6 +1108,34 @@ class NewItem extends PureComponent {
                         placeholder="请输入单品包介绍"
                         rows={4}
                       />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={16}>
+                <Col lg={24} md={12} sm={24}>
+                  <Form.Item label="单品图片">
+                    {getFieldDecorator('itemImages', {
+                      rules: [{ required: true, message: '请上传单品图片' }],
+                    })(
+                      <div className="clearfix">
+                        <Upload
+                          action={`${OPERATOR_URL}/manager/getdata`}
+                          listType="picture-card"
+                          fileList={fileList}
+                          onPreview={this.handleIMGPreview}
+                          onChange={this.handleIMGChange}
+                        >
+                          {fileList.length >= 8 ? null : uploadButton}
+                        </Upload>
+                        <Modal
+                          visible={previewVisible}
+                          footer={null}
+                          onCancel={this.handleIMGCancel}
+                        >
+                          <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                        </Modal>
+                      </div>
                     )}
                   </Form.Item>
                 </Col>

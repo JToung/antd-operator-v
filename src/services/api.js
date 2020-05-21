@@ -5,7 +5,7 @@ import ajax from './ajax';
 
 //查询信息
 export async function queryNews(params) {
-  console.log('api', params);
+  // console.log('api', params);
   return request(
     `${OPERATOR_URL}/manager/getnews?receiveId=${params.operator}&read=${params.read}`
   );
@@ -13,13 +13,13 @@ export async function queryNews(params) {
 
 //查询单个信息
 export async function queryOneNews(params) {
-  console.log('queryOneNews', params.id);
+  // console.log('queryOneNews', params.id);
   return request(`${OPERATOR_URL}/manager/getnews?_id=${params.id}`);
 }
 
 //更新消息已读
 export async function setRead(params) {
-  console.log('setRead', params.id);
+  // console.log('setRead', params.id);
   return request(`${OPERATOR_URL}/manager/setread?_id=${params.id}`, {
     method: 'POST',
     body: params,
@@ -30,6 +30,13 @@ export async function setRead(params) {
 export async function queryOperator(id) {
   console.log('api', id);
   return request(`${OPERATOR_URL}/manager/queryoperator?_id=${id}`);
+}
+
+
+//查看现金流量表
+export async function queryCash(params) {
+  console.log('api', params);
+  return request(`${platform_URL}/platform/querycash?${stringify(params)}`);
 }
 
 //查看运营商合约
@@ -189,9 +196,15 @@ export async function queryTask(params) {
 //添加单品
 export async function addItem(params) {
   return request(`${OPERATOR_URL}/manager/additem`, {
+    // method: 'POSTIMG',
     method: 'POST',
     body: params,
   });
+}
+
+//返回数据
+export async function getData(params) {
+  return request(`${OPERATOR_URL}/manager/getdata`);
 }
 
 //添加分区

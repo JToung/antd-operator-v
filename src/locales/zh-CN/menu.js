@@ -4,6 +4,7 @@ export default {
   'menu.operator.center': '运营商中心',
   'menu.operator.center.info': '运营商基础信息',
   'menu.operator.center.update': '运营商信息修改',
+  'menu.operator.cashflow': '应收应付管理',
   'menu.category': '服务品类包管理',
   'menu.category.home': '服务品类数据管理',
   'menu.category.info': '服务品类数据分析',

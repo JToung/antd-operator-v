@@ -51,6 +51,11 @@ export default [
               },
             ],
           },
+          {
+            path: '/operator/cashflow',
+            name: 'cashflow',
+            component: './Operator/Center/cashflow',
+          },
         ],
       },
       //category

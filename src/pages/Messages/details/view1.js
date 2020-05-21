@@ -49,7 +49,7 @@ class View1 extends PureComponent {
       type: 'message/queryNews',
       payload: params0,
     }).then(res => {
-      console.log('res0', res);
+      // console.log('res0', res);
       if (res.status != '0') {
         setTimeout(
           () =>

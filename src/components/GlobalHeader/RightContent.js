@@ -48,7 +48,7 @@ export default class GlobalHeaderRight extends PureComponent {
         type: 'message/queryNews',
         payload: params0,
       }).then(res => {
-        console.log('res0', res);
+        // console.log('res0', res);
         if (res.status == '1') {
           const { notices } = this.state;
           this.setState({ notices: [] }, () => {

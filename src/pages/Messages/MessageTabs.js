@@ -53,7 +53,7 @@ class MessageTabs extends PureComponent {
       type: 'message/queryNews',
       payload: params0,
     }).then(res => {
-      console.log('res0', res);
+      // console.log('res0', res);
       if (res.findresult != null) {
         setTimeout(
           () =>
