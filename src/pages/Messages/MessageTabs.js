@@ -86,7 +86,7 @@ class MessageTabs extends PureComponent {
     });
   }
 
-  //获取审核状态
+  //获取结果
   getResult = val => {
     if (val == '1') {
       return (

@@ -1,5 +1,17 @@
 import React, { PureComponent } from 'react';
-import { Table, Tag, Descriptions, Badge, Card, Modal, Button, Divider, Row, Col } from 'antd';
+import {
+  Table,
+  Tag,
+  Descriptions,
+  Badge,
+  Card,
+  Modal,
+  Button,
+  Divider,
+  Row,
+  Col,
+  Carousel,
+} from 'antd';
 import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './style.less';
@@ -8,6 +20,8 @@ import DescriptionList from '@/components/DescriptionList';
 import memoryUtils from '@/utils/memoryUtils';
 import moment from 'moment';
 import Link from 'umi/link';
+import './css.css';
+import 'antd/dist/antd.css';
 
 const statusMap = ['red', 'green', 'yellow', 'cyan', 'geekblue', 'lime'];
 const status = ['结束', '进行中', '待分配', '用户终止', '等待启动', '已派单未进行'];
@@ -29,11 +43,6 @@ class ViewItem extends PureComponent {
         key: '_id',
       },
       {
-        title: '任务日志名',
-        dataIndex: 'name',
-        key: 'name',
-      },
-      {
         title: '任务开始时间',
         dataIndex: 'start',
         key: 'start',
@@ -53,49 +62,58 @@ class ViewItem extends PureComponent {
       },
       {
         title: '操作',
-        render: (text, record) =>
-          this.state.log.length >= 1 ? (
+        render: (text, record) => {
+          const { logTask, logViewVisible, log } = this.state;
+          return log.length >= 1 ? (
             <div>
               {console.log('record', record.name)}
-              <Link onClick={() => this.showLogViewModal(record._id)}>查看</Link>
+              <Link onClick={() => this.showLogViewModal(record)}>查看</Link>
               <Modal
                 title="查看任务详情"
-                visible={this.state.logViewVisible}
+                visible={logViewVisible}
                 onOk={this.handleLogViewOk}
                 onCancel={this.handleLogCancel}
                 width={720}
               >
                 <Descriptions bordered layout="vertical">
-                  <Descriptions.Item label="任务日志id" span={2}>
-                    {record._id}
+                  <Descriptions.Item label="任务日志id" span={3}>
+                    {logTask._id}
                   </Descriptions.Item>
-                  <Descriptions.Item label="任务日志名">{record.name}</Descriptions.Item>
                   <Descriptions.Item label="任务状态" span={3}>
-                    <Badge status={statusLogMap[record.state]} text={statusLog[record.state]} />
+                    <Badge status={statusLogMap[logTask.state]} text={statusLog[logTask.state]} />
                   </Descriptions.Item>
                   <Descriptions.Item label="任务起始时间" span={3}>
-                    {record.start}
+                    {logTask.start}
                   </Descriptions.Item>
                   <Descriptions.Item label="任务结束时间" span={3}>
-                    {record.end}
+                    {logTask.end}
                   </Descriptions.Item>
-                  <Descriptions.Item label="日志简介简介" span={3}>
-                    {record.content}
-                  </Descriptions.Item>
+                  {/* <Descriptions.Item label="日志简介" span={3}>
+                    {logTask.content}
+                  </Descriptions.Item> */}
                   <Descriptions.Item label="专才反馈" span={3}>
-                    {record.Servicerfeedback}
+                    {logTask.serverFeedbackText}
                   </Descriptions.Item>
                   <Descriptions.Item label="图片反馈" span={3}>
-                    {record.serverFeedbackImg}待修改成图片
+                    {/* 待修改成图片 */}
+                    {/* <img
+                      alt="example"
+                      // style={{ width: 70, height: 70 }}
+                      src={
+                        'http://47.103.1.149:7001/public/admin/upload/customer/20200521/1590047190706.jpg'
+                      }
+                    /> */}
+                    {this.getImg(logTask)}
                   </Descriptions.Item>
                   <Descriptions.Item label="客户反馈" span={3}>
-                    {record.Customerfeedback}
+                    {logTask.Customerfeedback}
                   </Descriptions.Item>
                 </Descriptions>
               </Modal>
               <Divider type="vertical" />
             </div>
-          ) : null,
+          ) : null;
+        },
       },
     ];
 
@@ -176,31 +194,37 @@ class ViewItem extends PureComponent {
     return <Badge color={statusMap[state]} text={status[state]} />;
   }
 
+  getImg = View => {
+    console.log('View.serverFeedbackImg', View.serverFeedbackImg);
+    if (View.serverFeedbackImg != null) {
+      const imgs = View.serverFeedbackImg.map((serverFeedbackImg, index) => (
+        <div key={index}>
+          <img
+            alt="example"
+            style={{ width: 600 }}
+            src={'http://47.103.1.149:7001' + serverFeedbackImg.serverFeedbackImg}
+          />
+        </div>
+      ));
+      console.log('imgs', imgs);
+      return <div>{imgs}</div>;
+    } else {
+      return;
+    }
+  };
+
   //查看任务分区
   handleLogViewOk = e => {
     console.log(e);
     this.setState({
+      logTask: {},
       logViewVisible: false,
     });
   };
 
   showLogViewModal = keyView => {
-    this.setState({ keyView: keyView });
-    console.log('keyEditor', keyView);
-    const { dispatch } = this.props;
-
-    const params = {
-      _id: keyView,
-    };
-    dispatch({
-      type: 'workorder/queryLog',
-      payload: params,
-    }).then(res => {
-      this.setState({ logTask: res.workorderLogs });
-      console.log('logTask', res.workorderLogs);
-    });
-
     this.setState({
+      logTask: keyView,
       logViewVisible: true,
     });
   };
@@ -208,6 +232,7 @@ class ViewItem extends PureComponent {
   handleLogViewCancel = e => {
     console.log(e);
     this.setState({
+      logTask: {},
       logViewVisible: false,
     });
   };

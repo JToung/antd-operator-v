@@ -191,6 +191,7 @@ class View extends PureComponent {
     }
   };
 
+
   render() {
     const { loading } = this.props;
     const { messageData } = this.state;
