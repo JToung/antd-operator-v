@@ -20,6 +20,8 @@ const status = ['未运行', '正在运行'];
 class Center extends PureComponent {
   state = {
     previewVisible: false,
+    operatorProofVisible: false,
+    legalPersonPhotoVisible: false,
     Contract: {},
     operator: {},
     contractViewVisible: false,
@@ -166,8 +168,52 @@ class Center extends PureComponent {
     });
   };
 
+  //运营凭证查看
+  showProofModal = () => {
+    this.setState({
+      operatorProofVisible: true,
+    });
+  };
+
+  handleProofOk = e => {
+    // console.log(e);
+    this.setState({
+      operatorProofVisible: false,
+    });
+  };
+
+  handleProofCancel = e => {
+    // console.log(e);
+    this.setState({
+      operatorProofVisible: false,
+    });
+  }; 
+  
+  //证件照查看
+
+  showPersonPhotoModal = () => {
+    this.setState({
+      legalPersonPhotoVisible: true,
+    });
+  };
+
+  handlePersonPhotoOk = e => {
+    // console.log(e);
+    this.setState({
+      legalPersonPhotoVisible: false,
+    });
+  };
+
+  handlePersonPhotoCancel = e => {
+    // console.log(e);
+    this.setState({
+      legalPersonPhotoVisible: false,
+    });
+  };
+
   render() {
-    const { previewVisible, previewImage, Contract, operator } = this.state;
+    const { previewVisible, previewImage, Contract, operator,operatorProofVisible,
+      legalPersonPhotoVisible, } = this.state;
     const { loading } = this.props;
     console.log('loading', loading);
     // console.log('operator.date',operator);
@@ -180,16 +226,36 @@ class Center extends PureComponent {
       return (
         // 加头部
         <Card bordered={false}>
-          <Descriptions title="运营商基础信息管理" bordered loading={loading}>
+          <Descriptions title="运营商基础信息管理" bordered loading={loading} layout="vertical">
             <Descriptions.Item label="运营商ID">{operator._id}</Descriptions.Item>
             <Descriptions.Item label="运营商名">{operator.operatorName}</Descriptions.Item>
             <Descriptions.Item label="运营商合约">{this.getContract(Contract)}</Descriptions.Item>
+            <Descriptions.Item label="运营商凭证">
+            <img
+                alt="example"
+                style={{ width: 70, height: 70 }}
+                src={OPERATOR_URL + operator.operatorProof}
+                onClick={this.showProofModal}
+              />
+              <Modal
+                title="运营商凭证"
+                visible={operatorProofVisible}
+                footer={null}
+                onCancel={this.handleProofCancel}
+                onOk={this.handleProofOk}
+              >
+                <img
+                  alt="example"
+                  style={{ width: '100%' }}
+                  src={OPERATOR_URL + operator.operatorProof}
+                />
+              </Modal>
+            </Descriptions.Item>
             <Descriptions.Item label="入驻时间" span={2}>
               {moment(operator.operatorAddTime)
                 .subtract(8, 'hours')
                 .format('YYYY-MM-DD HH:mm:ss')}
             </Descriptions.Item>
-            <Descriptions.Item label="运营商凭证" />
             <Descriptions.Item label="运营商简介" span={3}>
               {operator.introduction}
             </Descriptions.Item>
@@ -203,11 +269,25 @@ class Center extends PureComponent {
             <Descriptions.Item label="法人身份信息">{operator.legalPersonIdNo}</Descriptions.Item>
             <Descriptions.Item label="法人联系方式">{operator.legalPersonPhone}</Descriptions.Item>
             <Descriptions.Item label="法人证件照">
-              <img
+            <img
                 alt="example"
                 style={{ width: 70, height: 70 }}
                 src={OPERATOR_URL + operator.legalPersonPhoto}
+                onClick={this.showPersonPhotoModal}
               />
+              <Modal
+                title="法人证件照"
+                visible={legalPersonPhotoVisible}
+                footer={null}
+                onCancel={this.handlePersonPhotoCancel}
+                onOk={this.handlePersonPhotoOk}
+              >
+                <img
+                  alt="example"
+                  style={{ width: '100%' }}
+                  src={OPERATOR_URL + operator.legalPersonPhoto}
+                />
+              </Modal>
             </Descriptions.Item>
             <Descriptions.Item label="法人邮箱">{operator.legalPersonEmail}</Descriptions.Item>
             <Descriptions.Item label="法人地址">{operator.legalPersonAdress}</Descriptions.Item>

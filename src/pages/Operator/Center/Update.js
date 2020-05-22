@@ -20,6 +20,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import { IdCodeValid } from '@/utils/utils';
 import { OPERATOR_URL } from '@/utils/Constants';
 import UploadlegalPersonPhoto from './UploadlegalPersonPhoto';
+import UploadOperatorProof from './UploadOperatorProof'
 
 @connect(({ operator, loading }) => ({
   operator,
@@ -147,7 +148,7 @@ class Update extends PureComponent {
           <Row gutter={16}>
             <Col lg={6} md={12} sm={24}>
               <Form.Item label="运行状态">
-                {getFieldDecorator('states', {
+                {getFieldDecorator('operatorState', {
                   initialValue: operator.data.operatorState,
                   rules: [
                     {
@@ -169,16 +170,10 @@ class Update extends PureComponent {
               </Form.Item>
             </Col>
             <Col xl={{ span: 6, offset: 2 }} lg={{ span: 8 }} md={{ span: 12 }} sm={24}>
-              <Form.Item name="operatorProof" label="营销凭证" valuePropName="fileList">
+              <Form.Item label="营销凭证">
                 {getFieldDecorator('operatorProof', {
-                  // rules: [{ required: true, message: '请上传凭证' }],
-                })(
-                  <Upload name="operatorProof" action="/upload.do" listType="picture">
-                    <Button>
-                      <UploadOutlined /> 请上传营销凭证
-                    </Button>
-                  </Upload>
-                )}
+                  rules: [{ required: true, message: '请上传营销凭证' }],
+                })(<UploadlegalPersonPhoto name={'operatorProof'} />)}
               </Form.Item>
             </Col>
           </Row>
