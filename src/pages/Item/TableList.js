@@ -74,11 +74,13 @@ class TableListItem extends PureComponent {
       title: '单品简介',
       dataIndex: 'itemIntroduction',
       key: 'itemIntroduction',
+      width:200,
     },
     {
       title: '单品状态',
       dataIndex: 'itemState',
       key: 'itemState',
+      width:120,
       render(val) {
         return <Badge status={statusMap[val]} text={status[val]} />;
       },
@@ -97,6 +99,7 @@ class TableListItem extends PureComponent {
     },
     {
       title: '操作',
+      width:200,
       render: val => (
         <Fragment>
           {console.log('val',val)}

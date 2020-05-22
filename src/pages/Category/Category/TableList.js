@@ -73,11 +73,13 @@ class TableList extends PureComponent {
       title: '品类简介',
       dataIndex: 'categoryIntrod',
       key: 'categoryIntrod',
+      width:200,
     },
     {
       title: '上架状态',
       dataIndex: 'categoryState',
       key: 'categoryState',
+      width:120,
       render(val) {
         return <Badge status={statusMap[val]} text={status[val]} />;
       },
