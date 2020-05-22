@@ -47,7 +47,6 @@ class Avatar extends React.Component {
       }
 
       getBase64(info.file.originFileObj, imageUrl => {
-        console.log(imageUrl);
         this.setState({
           imageUrl,
           loading: false,

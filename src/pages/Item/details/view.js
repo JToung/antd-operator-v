@@ -8,6 +8,8 @@ import DescriptionList from '@/components/DescriptionList';
 import memoryUtils from '@/utils/memoryUtils';
 import moment from 'moment';
 import Link from 'umi/link';
+import { OPERATOR_URL } from '@/utils/Constants';
+
 
 @connect(({ item, loading }) => ({
   item,
@@ -278,6 +280,14 @@ class ViewItem extends PureComponent {
 
             <Descriptions.Item label="单品包介绍" span={3}>
               {Item.itemIntroduction}
+            </Descriptions.Item>
+            <Descriptions.Item label="单品包图片" span={3}>
+              <span>
+                {Item.imgList &&
+                  Item.imgList.map(img => (
+                    <img style={{ width: 150, height: 150 }} key={img} src={OPERATOR_URL + img} alt="img" />
+                  ))}
+              </span>
             </Descriptions.Item>
             <Descriptions.Item label="单品分区" span={3}>
               <Table bordered dataSource={partitions} columns={this.partitionColumns} />

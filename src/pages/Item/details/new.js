@@ -32,6 +32,7 @@ import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import { OPERATOR_URL } from '@/utils/Constants';
+
 // import ItemPhoto from './ItemPhoto';
 
 const { Column, ColumnGroup } = Table;
@@ -450,6 +451,8 @@ class NewItem extends PureComponent {
       categorys: [],
       //已选择品类id
       categorysId: '',
+      //图片
+      imgList: [],
     };
   }
 
@@ -789,7 +792,7 @@ class NewItem extends PureComponent {
 
   handlePartitionOk = e => {
     const { partitionCount, partitions } = this.state;
-    this.props.form.validateFields((err, values) => {  
+    this.props.form.validateFields((err, values) => {
       const newData = {
         key: partitionCount,
         name: values.name,
@@ -962,25 +965,49 @@ class NewItem extends PureComponent {
 
   handleIMGChange = ({ fileList }) => {
     console.log('fileList', this.state.fileList);
+    this.setState({ imgList: [] });
+    // 获取服务器返回值
+    
+    fileList.map(file => {
+      const { response } = file;
+      console.log('response:::', response);
+      const { imgList } = this.state;
+      const a = JSON.stringify(file.response);
+      if(a != null){
+        //取 a.slice(11,-15) 部分字符 即图片路径
+        this.setState({ imgList: [...imgList, a.slice(11,-15)] });
+        console.log('imgList', this.state.imgList);
+        // const img = this.state.imgList.map( a => {
+        //   console.log('a', );
+        //   a.slice(10,52)
+        // })
+        // console.log('img', img);
+        console.log("测试对象",typeof this.state.imgList)
+      }
+    });
+
+    console.log('imgList',this.state.imgList)
     this.setState({ fileList });
+  };
+
+  getIMG = () => {
+    this.state.fileList.map(fileList => {
+      console.log('fileListmap', fileList.response);
+    });
   };
 
   handleSubmit = e => {
     const { dispatch, match } = this.props;
     const { params } = match;
-    const { fileList } = this.state;
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      const img = fileList.map(fileList => {
-        fileList.response
-      })
+      const { imgList } = this.state;
       const payload = {
         ...values,
         itemAddTime: new Date().getTime(),
         operatorID: localStorage.getItem('userId'),
         itemState: '0',
         itemExamineTF: '0',
-        imgList: img,
       };
 
       console.log('values', values);
@@ -992,11 +1019,18 @@ class NewItem extends PureComponent {
       //   console.log('receive the value of input ' + values);
       // }
       console.log('参数', payload);
-      let formData = new FormData();
+      const formData = new FormData();
       // fields 是表單內容，將它 append 到 formData
       Object.keys(payload).map(item => {
         formData.append(item, payload[item]);
       });
+      
+      // const formDataIMG = new FormData();
+      for (var i = 0; i < imgList.length; i++) {
+        formData.append('imgList',imgList[i]);
+       }
+
+      console.log('参数', formData);
       dispatch({
         type: 'item/addItem',
         payload: formData,
@@ -1071,7 +1105,9 @@ class NewItem extends PureComponent {
         <div className="ant-upload-text">上传</div>
       </div>
     );
-    const { interruptData, previewVisible, previewImage, fileList } = this.state;
+    const { interruptData, previewVisible, previewImage, fileList, imgList } = this.state;
+
+    console.log('imgList', imgList);
     console.log('interruptData: ', interruptData);
     return (
       // 加头部
@@ -1126,7 +1162,7 @@ class NewItem extends PureComponent {
                           onPreview={this.handleIMGPreview}
                           onChange={this.handleIMGChange}
                         >
-                          {fileList.length >= 8 ? null : uploadButton}
+                          {fileList.length >= 6 ? null : uploadButton}
                         </Upload>
                         <Modal
                           visible={previewVisible}
