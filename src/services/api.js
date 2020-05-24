@@ -202,6 +202,15 @@ export async function addItem(params) {
   });
 }
 
+//添加单品
+export async function changeItemState(params) {
+  return request(`${OPERATOR_URL}/manager/changestate?${stringify(params)}`, {
+    // method: 'POSTIMG',
+    method: 'POST',
+    body: params,
+  });
+}
+
 //返回数据
 export async function getData(params) {
   return request(`${OPERATOR_URL}/manager/getdata`);

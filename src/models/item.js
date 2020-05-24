@@ -10,6 +10,7 @@ import {
   upPartition,
   upInterrupt,
   upTask,
+  changeItemState
 } from '@/services/api';
 
 export default {
@@ -131,6 +132,17 @@ export default {
       console.log('upTaskResponse', response);
       return response;
     },
+    *changeItemState({ payload }, { call, put }) {
+      console.log('changeItemState', payload);
+      const response = yield call(changeItemState, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      console.log('changeItemStateResponse', response);
+      return response;
+    },
+    
     // *uporoffCategory({ payload }, { call, put }) {
     //   console.log('uporoffCategoryPayload', payload);
     //   const response = yield call(uporoffCategory, payload);

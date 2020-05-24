@@ -21,7 +21,7 @@ import {
   Divider,
   Steps,
   Radio,
-  Table
+  Table,
 } from 'antd';
 // import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -41,6 +41,56 @@ const getValue = obj =>
 const statusMap = ['error', 'success'];
 const status = ['未上架', '已上架'];
 
+/*
+  提交单品审核model
+*/
+const ExamineForm = Form.create()(props => {
+  const { examineViewVisible, form, handleExamineViewOk, handleExamineViewCancel } = props;
+  const { getFieldDecorator } = form;
+  const okHandle = () => {
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      handleExamineViewOk(fieldsValue);
+      console.log('fieldsValue', fieldsValue);
+    });
+  };
+
+  return (
+    <Modal
+      title="填写上/下架理由"
+      visible={examineViewVisible}
+      onOk={okHandle}
+      onCancel={handleExamineViewCancel}
+      width={720}
+    >
+      <Form layout="vertical">
+        <Card bordered={false}>
+          <Row gutter={16}>
+            <Col lg={24} md={12} sm={24}>
+              <Form.Item label="上/下架理由">
+                {getFieldDecorator('itemReason', {
+                  rules: [
+                    {
+                      required: true,
+                      message: '请输入上/下架理由',
+                    },
+                  ],
+                })(
+                  <Input.TextArea
+                    style={{ minHeight: 32 }}
+                    placeholder="请输入上/下架理由"
+                    rows={4}
+                  />
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
+        </Card>
+      </Form>
+    </Modal>
+  );
+});
+
 /* eslint react/no-multi-comp:0 */
 @connect(({ item, loading }) => ({
   item,
@@ -52,11 +102,13 @@ class TableListItem extends PureComponent {
   state = {
     modalVisible: false,
     updateModalVisible: false,
+    examineViewVisible: false,
     expandForm: false,
     selectedRows: [],
     formValues: {},
     stepFormValues: {},
-    Item:[],
+    Item: [],
+    valT: {},
   };
 
   columns = [
@@ -74,13 +126,13 @@ class TableListItem extends PureComponent {
       title: '单品简介',
       dataIndex: 'itemIntroduction',
       key: 'itemIntroduction',
-      width:200,
+      width: 200,
     },
     {
       title: '单品状态',
       dataIndex: 'itemState',
       key: 'itemState',
-      width:120,
+      width: 120,
       render(val) {
         return <Badge status={statusMap[val]} text={status[val]} />;
       },
@@ -99,10 +151,10 @@ class TableListItem extends PureComponent {
     },
     {
       title: '操作',
-      width:200,
+      width: 200,
       render: val => (
         <Fragment>
-          {console.log('val',val)}
+          {console.log('val', val)}
           <Link to={`/item/v/editor-item/${val._id}`}>编辑</Link>
           <Divider type="vertical" />
           <Link to={`/item/v/view-item/${val._id}`}>查看</Link>
@@ -110,19 +162,23 @@ class TableListItem extends PureComponent {
           <Link to={`/item/v/delete-item/${val._id}`}>删除</Link>
           <Divider type="vertical" />
           {this.initialValue(val)}
+          <ExamineForm
+            examineViewVisible={this.state.examineViewVisible}
+            handleExamineViewOk={this.handleExamineViewOk}
+            handleExamineViewCancel={this.handleExamineViewCancel}
+          />
         </Fragment>
       ),
     },
   ];
 
-  initialValue(val){
-    if(val.itemState =="0"){
-      return <Link to={`/item/v/uporoff-item/${val._id}`}>上架</Link>
-    }else if(val.itemState =="1"){
-      return <Link to={`/item/v/uporoff-item/${val._id}`}>下架</Link>
+  initialValue(val) {
+    if (val.itemState == '0') {
+      return <a onClick={() => this.showExamineViewModal(val)}>上架</a>;
+    } else {
+      return <a onClick={() => this.showExamineViewModal(val)}>下架</a>;
     }
   }
-
   componentDidMount() {
     if (JSON.parse(localStorage.getItem('user')) === null) {
       message.error('未登录！！请登录！');
@@ -147,12 +203,11 @@ class TableListItem extends PureComponent {
     dispatch({
       type: 'item/fetchItem',
       payload: params,
-    }).then( res => {
-      this.setState({ Item : res.findResult})
+    }).then(res => {
+      this.setState({ Item: res.findResult });
     });
   }
 
-  
   handleFormReset = () => {
     const { form, dispatch } = this.props;
     form.resetFields();
@@ -165,8 +220,54 @@ class TableListItem extends PureComponent {
     dispatch({
       type: 'item/fetchItem',
       payload: params,
-    }).then( res => {
-      this.setState({ Item : res.findResult})
+    }).then(res => {
+      this.setState({ Item: res.findResult });
+    });
+  };
+
+  //提交审核
+  handleExamineViewOk = (values, e) => {
+    const { dispatch } = this.props;
+    const { valT } = this.state;
+    console.log('valT', valT);
+    console.log(e);
+    const data = {
+      ...values,
+      ...valT,
+      operatorId: localStorage.getItem('userId'),
+    };
+    console.log('data', data);
+
+    dispatch({
+      type: 'item/changeItemState',
+      payload: data,
+    }).then(res => {
+      if (res.status == '1') {
+        message.success(res.information);
+        //刷新页面
+        location.reload(true);
+      } else {
+        message.error(res.information);
+      }
+    });
+
+    this.setState({
+      examineViewVisible: false,
+    });
+  };
+
+  showExamineViewModal = (val, e) => {
+    console.log(e);
+    this.setState({
+      valT: val,
+      examineViewVisible: true,
+    });
+  };
+
+  handleExamineViewCancel = e => {
+    console.log(e);
+    this.setState({
+      examineViewVisible: false,
     });
   };
 
@@ -209,16 +310,15 @@ class TableListItem extends PureComponent {
         ...values,
         operatorID: localStorage.getItem('userId'),
       };
-      console.log('payload',payload);
+      console.log('payload', payload);
       dispatch({
         type: 'item/fetchItem',
         payload: payload,
-      }).then( res => {
-        this.setState({ Item : res.findResult})
+      }).then(res => {
+        this.setState({ Item: res.findResult });
       });
     });
   };
-
 
   renderSimpleForm() {
     const {
@@ -261,7 +361,7 @@ class TableListItem extends PureComponent {
 
   queryDate(item) {
     if (item.data != null) {
-      this.setState()
+      this.setState();
       return item.data.findResult;
     } else {
       return item;
@@ -287,7 +387,6 @@ class TableListItem extends PureComponent {
                   新建
                 </Button>
               </Link>
-
             </div>
             <Table
               selectedRows={selectedRows}

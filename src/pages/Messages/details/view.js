@@ -180,7 +180,7 @@ class View extends PureComponent {
         return messageData.verifiedData.reason;
         break;
       case 'I':
-        return ' ';
+        return messageData.verifiedData.reason;
         break;
       case 'g':
         return messageData.reason;
