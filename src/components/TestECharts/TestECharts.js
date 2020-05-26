@@ -11,6 +11,17 @@ import 'echarts/lib/component/markLine';
 
 class TestECharst extends React.Component {
   componentDidMount() {
+    console.log('ceshidata111',this.props.data)
+    // window.onresize = myChart.resize;
+    this.initChart();
+  }
+  // 更新数据重新初始化视图
+  componentDidUpdate() {
+    console.log('ceshidata222',this.props.data)
+    this.initChart();
+}
+
+  initChart = () =>{
     // 初始化
     var myChart = echarts.init(document.getElementById('main'));
     // 绘制图表
@@ -49,7 +60,7 @@ class TestECharst extends React.Component {
         {
           name: this.props.DataName[0],
           type: 'bar',
-          data: this.props.data.ydata.ydata1,
+          data: this.props.data.ydata1,
           markPoint: {
             data: [{ type: 'max', name: '最大值' }, { type: 'min', name: '最小值' }],
           },
@@ -60,7 +71,7 @@ class TestECharst extends React.Component {
         {
           name: this.props.DataName[1],
           type: 'bar',
-          data: this.props.data.ydata.ydata2,
+          data: this.props.data.ydata2,
           markPoint: {
             data: [{ type: 'max', name: '最大值' }, { type: 'min', name: '最小值' }],
           },
@@ -71,7 +82,18 @@ class TestECharst extends React.Component {
         {
           name: this.props.DataName[2],
           type: 'bar',
-          data: this.props.data.ydata.ydata3,
+          data: this.props.data.ydata3,
+          markPoint: {
+            data: [{ type: 'max', name: '最大值' }, { type: 'min', name: '最小值' }],
+          },
+          markLine: {
+            data: [{ type: 'average', name: '平均值' }],
+          },
+        },
+        {
+          name: this.props.DataName[3],
+          type: 'bar',
+          data: this.props.data.ydata4,
           markPoint: {
             data: [{ type: 'max', name: '最大值' }, { type: 'min', name: '最小值' }],
           },
@@ -81,11 +103,10 @@ class TestECharst extends React.Component {
         },
       ],
     });
-    // window.onresize = myChart.resize;
   }
 
   render() {
-    return <div id="main" style={{ width: '100%', height: 360 }} key={this.props.key} />;
+    return <div id="main" style={{ width: '100%', height: 360 }} />;
   }
 }
 

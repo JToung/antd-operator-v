@@ -219,10 +219,13 @@ class MessageTabs extends PureComponent {
               itemLayout="vertical"
               size="large"
               pagination={{
-                onChange: page => {
-                  console.log(page);
+                showSizeChanger: true,
+                showQuickJumper: true,
+                total: messageListData0.length, // 数据总数
+                pageSize: 3, // 每页条数
+                showTotal: total => {
+                  return `共 ${total} 条`;
                 },
-                pageSize: 6,
               }}
               dataSource={messageListData0}
               renderItem={item => this.getNew(item)}
@@ -233,10 +236,13 @@ class MessageTabs extends PureComponent {
               itemLayout="vertical"
               size="large"
               pagination={{
-                onChange: page => {
-                  console.log(page);
+                showSizeChanger: true,
+                showQuickJumper: true,
+                total: messageListData1.length, // 数据总数
+                pageSize: 3, // 每页条数
+                showTotal: total => {
+                  return `共 ${total} 条`;
                 },
-                pageSize: 6,
               }}
               dataSource={messageListData1}
               renderItem={item => this.getNew(item)}

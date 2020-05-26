@@ -22,7 +22,7 @@ for (let i = 0; i < 7; i += 1) {
 const columns = [
   {
     title: '时间',
-    dataIndex: 'updatedAt',
+    dataIndex: 'timestamp',
     sorter: true,
     render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
   },
@@ -37,7 +37,7 @@ const columns = [
     key: 'operatorReceivable',
   },
   {
-    title: '专才应收款',
+    title: '平台应收款',
     dataIndex: 'serverReceivable',
     key: 'serverReceivable',
   },
@@ -68,19 +68,24 @@ const dataCS = [
 ];
 
 const SalesCard = memo(
-  ({ rangePickerValue, salesData, isActive, handleRangePickerChange, loading, selectDate }) => (
+  ({
+    rangePickerValue,
+    salesData,
+    isActive,
+    handleRangePickerChange,
+    loading,
+    selectDate,
+    VolumeDate,
+    Data,
+    dataDD,
+    ServerRank
+  }) => (
     <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}>
       <div className={styles.salesCard}>
         <Tabs
           tabBarExtraContent={
             <div className={styles.salesExtraWrap}>
               <div className={styles.salesExtra}>
-                <a className={isActive('today')} onClick={() => selectDate('today')}>
-                  <FormattedMessage id="app.analysis.all-day" defaultMessage="All Day" />
-                </a>
-                <a className={isActive('week')} onClick={() => selectDate('week')}>
-                  <FormattedMessage id="app.analysis.all-week" defaultMessage="All Week" />
-                </a>
                 <a className={isActive('month')} onClick={() => selectDate('month')}>
                   <FormattedMessage id="app.analysis.all-month" defaultMessage="All Month" />
                 </a>
@@ -88,37 +93,25 @@ const SalesCard = memo(
                   <FormattedMessage id="app.analysis.all-year" defaultMessage="All Year" />
                 </a>
               </div>
-              <RangePicker
-                value={rangePickerValue}
-                onChange={handleRangePickerChange}
-                style={{ width: 256 }}
-              />
             </div>
           }
           size="large"
           tabBarStyle={{ marginBottom: 24 }}
         >
           <TabPane
-            tab={<FormattedMessage id="app.analysis.sales" defaultMessage="Sales" />}
+            tab={<FormattedMessage id="app.analysis.all" defaultMessage="Sales" />}
             key="sales"
           >
             <Row>
               <Col xl={16} lg={12} md={12} sm={24} xs={24}>
                 <div className={styles.salesBar}>
                   <TestECharst
-                    data={{
-                      xdata: [ '1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月',],
-                      ydata: {
-                        ydata1:[2000,4090,7000,23020,25060,76070,135060,162002,3206,20000,6004,3003,],
-                        ydata2:[1800,3000,5000,20020,2504,76014,131460,161102,206,27000,1004,703,],
-                        ydata3:[1900,2000,2000,3020,25040,76001,6060,16002,3006,2500,5004,2303,],
-                      }
-                    }}
-                    DataName={['销售额','平台收账款','应付账款']}
-                    legend={['销售额','平台收账款','应付账款']}
-                    echartsTitle='趋势图'
-                    key="volume"
+                    data={Data}
+                    DataName={['销售额', '成交量', '利润', '应付账款']}
+                    legend={['销售额', '成交量', '利润', '应付账款']}
+                    echartsTitle="趋势图"
                   />
+                  {console.log('ceshiData', Data)}
                 </div>
               </Col>
               <Col xl={8} lg={12} md={12} sm={24} xs={24}>
@@ -130,7 +123,7 @@ const SalesCard = memo(
                     />
                   </h4>
                   <ul className={styles.rankingList}>
-                    {rankingListData.map((item, i) => (
+                    {ServerRank.map((item, i) => (
                       <li key={item.title}>
                         <span
                           className={`${styles.rankingItemNumber} ${i < 3 ? styles.active : ''}`}
@@ -153,7 +146,20 @@ const SalesCard = memo(
         </Tabs>
         <Card>
           <DescriptionList size="large" title="详细数据" style={{ marginBottom: 32 }}>
-            <Table columns={columns} dataSource={dataCS} style={{ padding: 10 }} />
+            <Table
+              columns={columns}
+              dataSource={dataDD}
+              pagination={{
+                showSizeChanger: true,
+                showQuickJumper: true,
+                total: dataDD.length, // 数据总数
+                pageSize: 3, // 每页条数
+                showTotal: total => {
+                  return `共 ${total} 条`;
+                },
+              }}
+              style={{ padding: 10 }}
+            />
           </DescriptionList>
         </Card>
       </div>

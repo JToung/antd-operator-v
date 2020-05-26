@@ -187,8 +187,8 @@ class Center extends PureComponent {
     this.setState({
       operatorProofVisible: false,
     });
-  }; 
-  
+  };
+
   //证件照查看
 
   showPersonPhotoModal = () => {
@@ -211,16 +211,32 @@ class Center extends PureComponent {
     });
   };
 
+  Out = () => {
+    dispatch({
+      type: 'login/logout',
+    });
+  };
+
   render() {
-    const { previewVisible, previewImage, Contract, operator,operatorProofVisible,
-      legalPersonPhotoVisible, } = this.state;
+    const {
+      previewVisible,
+      previewImage,
+      Contract,
+      operator,
+      operatorProofVisible,
+      legalPersonPhotoVisible,
+    } = this.state;
     const { loading } = this.props;
     console.log('loading', loading);
     // console.log('operator.date',operator);
     if (operator._id == null) {
       return (
         // 加头部
-        <Card bordered={false} />
+        <Card bordered={false}>
+          <Button type="danger" onClick={() => this.Out()} className={styles.ButtonCenter}>
+            退出登录
+          </Button>
+        </Card>
       );
     } else {
       return (
@@ -231,7 +247,7 @@ class Center extends PureComponent {
             <Descriptions.Item label="运营商名">{operator.operatorName}</Descriptions.Item>
             <Descriptions.Item label="运营商合约">{this.getContract(Contract)}</Descriptions.Item>
             <Descriptions.Item label="运营商凭证">
-            <img
+              <img
                 alt="example"
                 style={{ width: 70, height: 70 }}
                 src={OPERATOR_URL + operator.operatorProof}
@@ -269,7 +285,7 @@ class Center extends PureComponent {
             <Descriptions.Item label="法人身份信息">{operator.legalPersonIdNo}</Descriptions.Item>
             <Descriptions.Item label="法人联系方式">{operator.legalPersonPhone}</Descriptions.Item>
             <Descriptions.Item label="法人证件照">
-            <img
+              <img
                 alt="example"
                 style={{ width: 70, height: 70 }}
                 src={OPERATOR_URL + operator.legalPersonPhoto}

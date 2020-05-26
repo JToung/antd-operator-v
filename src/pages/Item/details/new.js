@@ -382,31 +382,37 @@ class NewItem extends PureComponent {
       {
         title: '任务名',
         dataIndex: 'name',
-        width: '20%',
+        width: '16%',
         editable: true,
       },
       {
         title: '任务内容',
         dataIndex: 'introduction',
-        width: '20%',
+        width: '16%',
         editable: true,
       },
       {
         title: '执行条件',
         dataIndex: 'conditions',
-        width: '20%',
+        width: '16%',
         editable: true,
       },
       {
         title: '最长执行任务时间',
         dataIndex: 'maxCompletionTime',
-        width: '20%',
+        width: '16%',
         editable: true,
       },
       {
         title: '任务通过条件',
         dataIndex: 'passageConditions',
-        width: '20%',
+        width: '16%',
+        editable: true,
+      },
+      {
+        title: '任务分成',
+        dataIndex: 'receivable',
+        width: '16%',
         editable: true,
       },
       {
@@ -610,6 +616,7 @@ class NewItem extends PureComponent {
       conditions: `请填写任务执行条件`,
       maxCompletionTime: 72,
       passageConditions: `请填写任务通过条件`,
+      receivable: 0.1,
       order: taskCount,
     };
     this.setState({
@@ -967,26 +974,26 @@ class NewItem extends PureComponent {
     console.log('fileList', this.state.fileList);
     this.setState({ imgList: [] });
     // 获取服务器返回值
-    
+
     fileList.map(file => {
       const { response } = file;
       console.log('response:::', response);
       const { imgList } = this.state;
       const a = JSON.stringify(file.response);
-      if(a != null){
+      if (a != null) {
         //取 a.slice(11,-15) 部分字符 即图片路径
-        this.setState({ imgList: [...imgList, a.slice(11,-15)] });
+        this.setState({ imgList: [...imgList, a.slice(11, -15)] });
         console.log('imgList', this.state.imgList);
         // const img = this.state.imgList.map( a => {
         //   console.log('a', );
         //   a.slice(10,52)
         // })
         // console.log('img', img);
-        console.log("测试对象",typeof this.state.imgList)
+        console.log('测试对象', typeof this.state.imgList);
       }
     });
 
-    console.log('imgList',this.state.imgList)
+    console.log('imgList', this.state.imgList);
     this.setState({ fileList });
   };
 
@@ -1007,7 +1014,7 @@ class NewItem extends PureComponent {
         itemAddTime: new Date().getTime(),
         operatorID: localStorage.getItem('userId'),
         itemState: '0',
-        itemExamineTF: '0',
+        examineTF: '0',
       };
 
       console.log('values', values);
@@ -1024,11 +1031,11 @@ class NewItem extends PureComponent {
       Object.keys(payload).map(item => {
         formData.append(item, payload[item]);
       });
-      
+
       // const formDataIMG = new FormData();
       for (var i = 0; i < imgList.length; i++) {
-        formData.append('imgList',imgList[i]);
-       }
+        formData.append('imgList', imgList[i]);
+      }
 
       console.log('参数', formData);
       dispatch({
@@ -1076,6 +1083,7 @@ class NewItem extends PureComponent {
                   passageConditions: task.passageConditions,
                   partitionId: res.partitionInstance._id,
                   order: task.order,
+                  receivable:  task.receivable,
                 };
                 console.log('partitionId: ', res.partitionInstance._id);
                 console.log('taskD', taskD);

@@ -3,6 +3,84 @@ import request from '@/utils/request';
 import { OPERATOR_URL , platform_URL } from '../utils/Constants';
 import ajax from './ajax';
 
+
+//获取现金流中已结束的流量表
+export async function queryCash01(params) {
+  return request(`${platform_URL}/platform/querycash?state=1&state=0&operatorId=${params.id}`);
+}
+
+//累计销售额
+export async function queryTotalamout(params) {
+  return request(`${OPERATOR_URL}/manager/operatorsale?operatorId=${params.id}`);
+}
+
+//月销售额及日增长比
+export async function querySaleMonth(params) {
+  return request(`${OPERATOR_URL}/manager/operatoronmonth?operatorId=${params.id}`);
+}
+
+//年销售额
+export async function querySaleYear(params) {
+  return request(`${OPERATOR_URL}/manager/operatoronyear?operatorId=${params.id}`);
+}
+
+
+//累计成交量
+export async function queryVolume(params) {
+  return request(`${OPERATOR_URL}/manager/totalcount?operatorId=${params.id}`);
+}
+
+//本月成交量以及日比
+export async function queryVolumeMonth(params) {
+  return request(`${OPERATOR_URL}/manager/countonmonth?operatorId=${params.id}`);
+}
+
+//本日成交量
+export async function queryVolumeOnday(params) {
+  return request(`${OPERATOR_URL}/manager/countonday?operatorId=${params.id}`);
+}
+
+//年成交量
+export async function queryVolumeYear(params) {
+  return request(`${OPERATOR_URL}/manager/countonyear?operatorId=${params.id}`);
+}
+
+
+//累计利润
+export async function queryProfit(params) {
+  return request(`${OPERATOR_URL}/manager/totalcash?operatorId=${params.id}`);
+}
+
+//月利润
+export async function queryProfitMonth(params) {
+  return request(`${OPERATOR_URL}/manager/cashonmonth?operatorId=${params.id}`);
+}
+
+//年利润
+export async function queryProfitYear(params) {
+  return request(`${OPERATOR_URL}/manager/cashonyear?operatorId=${params.id}`);
+}
+
+//累计应付
+export async function queryDebt(params) {
+  return request(`${OPERATOR_URL}/manager/totaldebt?operatorId=${params.id}`);
+}
+
+//月应付
+export async function queryDebtMonth(params) {
+  return request(`${OPERATOR_URL}/manager/debtonmonth?operatorId=${params.id}`);
+}
+
+//年应付
+export async function queryDebtYear(params) {
+  return request(`${OPERATOR_URL}/manager/debtonYear?operatorId=${params.id}`);
+}
+
+//运营商排行
+export async function queryServerRank(params) {
+  return request(`${OPERATOR_URL}/manager/servicerRank?operatorId=${params.id}`);
+}
+
 //查询信息
 export async function queryNews(params) {
   // console.log('api', params);

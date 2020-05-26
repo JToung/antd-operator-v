@@ -1,4 +1,5 @@
 export default {
+  'app.analysis.all':'趋势',
   'app.analysis.test': '专才 {no} 号',
   'app.analysis.introduce': '指标说明',
   'app.analysis.total-sales': '总销售额',
@@ -11,9 +12,9 @@ export default {
   'app.analysis.visits-trend': '访问量趋势',
   'app.analysis.visits-ranking': '门店访问量排名',
   'app.analysis.day-visits': '日访问量',
-  'app.analysis.week': '周同比',
-  'app.analysis.day': '日同比',
-  'app.analysis.receivable': '平台应收账款',
+  'app.analysis.week': '周环比',
+  'app.analysis.day': '日环比',
+  'app.analysis.receivable': '利润',
   'app.analysis.day-receivable': '日应收账款',
   'app.analysis.receivable-trend':'应收账款趋势',
   'app.analysis.payable': '应付账款',

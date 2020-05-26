@@ -278,6 +278,15 @@ class TableList extends PureComponent {
               rowKey="_id"
               loading={loading}
               dataSource={servicer}
+              pagination={{
+                showSizeChanger: true,
+                showQuickJumper: true,
+                total: servicer.length, // 数据总数
+                pageSize: 6, // 每页条数
+                showTotal: total => {
+                  return `共 ${total} 条`;
+                },
+              }}
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
             />

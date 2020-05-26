@@ -21,7 +21,7 @@ import {
   Divider,
   Steps,
   Radio,
-  Table
+  Table,
 } from 'antd';
 // import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -56,30 +56,27 @@ class TableList extends PureComponent {
     selectedRows: [],
     formValues: {},
     stepFormValues: {},
+    category:[],
   };
 
   columns = [
     {
-      title: '品类ID',
-      dataIndex: '_id',
-      key: '_id',
-    },
-    {
       title: '品类名称',
       dataIndex: 'categoryName',
       key: 'categoryName',
+      width: '20%',
     },
     {
       title: '品类简介',
       dataIndex: 'categoryIntrod',
       key: 'categoryIntrod',
-      width:200,
+      width: '25%',
     },
     {
       title: '上架状态',
       dataIndex: 'categoryState',
       key: 'categoryState',
-      width:120,
+      width: '15%',
       render(val) {
         return <Badge status={statusMap[val]} text={status[val]} />;
       },
@@ -95,12 +92,13 @@ class TableList extends PureComponent {
             .format('YYYY-MM-DD HH:mm:ss')}
         </span>
       ),
+      width: '15%',
     },
     {
       title: '操作',
       render: val => (
         <Fragment>
-          {console.log('val',val)}
+          {console.log('val', val)}
           <Link to={`/category/v/editor-categroy/${val._id}`}>编辑</Link>
           <Divider type="vertical" />
           <Link to={`/category/v/view-categroy/${val._id}`}>查看</Link>
@@ -113,11 +111,11 @@ class TableList extends PureComponent {
     },
   ];
 
-  initialValue(val){
-    if(val.categoryState =="0"){
-      return <Link to={`/category/v/uporoff-categroy/${val._id}`}>上架</Link>
-    }else if(val.categoryState =="1"){
-      return <Link to={`/category/v/uporoff-categroy/${val._id}`}>下架</Link>
+  initialValue(val) {
+    if (val.categoryState == '0') {
+      return <Link to={`/category/v/uporoff-categroy/${val._id}`}>上架</Link>;
+    } else if (val.categoryState == '1') {
+      return <Link to={`/category/v/uporoff-categroy/${val._id}`}>下架</Link>;
     }
   }
 
@@ -145,9 +143,12 @@ class TableList extends PureComponent {
     dispatch({
       type: 'category/fetchCategory',
       payload: params,
+    }).then(res => {
+      if (res.status == '1') {
+        this.setState({ category: res.res });
+      }
     });
   }
-
 
   handleFormReset = () => {
     const { form, dispatch } = this.props;
@@ -161,6 +162,10 @@ class TableList extends PureComponent {
     dispatch({
       type: 'category/fetchCategory',
       payload: params,
+    }).then(res => {
+      if (res.status == '1') {
+        this.setState({ category: res.res });
+      }
     });
   };
 
@@ -206,11 +211,13 @@ class TableList extends PureComponent {
       dispatch({
         type: 'category/fetchCategory',
         payload: payload,
+      }).then(res => {
+        if (res.status == '1') {
+          this.setState({ category: res.res });
+        }
       });
     });
   };
-
-
 
   renderSimpleForm() {
     const {
@@ -253,14 +260,15 @@ class TableList extends PureComponent {
 
   queryDate(category) {
     if (category.data != null) {
-      return category.data.res;
+      return category;
     } else {
       return category;
     }
   }
 
   render() {
-    const { category = {}, loading } = this.props;
+    const { loading } = this.props;
+    const{category} = this.state;
     console.log('categoryListrender', category);
     console.log('loading', loading);
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
@@ -277,17 +285,25 @@ class TableList extends PureComponent {
                   新建
                 </Button>
               </Link>
-
             </div>
             <Table
               selectedRows={selectedRows}
               rowKey="_id"
               loading={loading}
-              dataSource={this.queryDate(category)}
+              dataSource={category}
+              pagination={{
+                showSizeChanger: true,
+                showQuickJumper: true,
+                total: category.length, // 数据总数
+                pageSize: 6, // 每页条数
+                showTotal: total => {
+                  return `共 ${total} 条`;
+                },
+              }}
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
             />
-            {console.log('categoryList', category.data.res)}
+            {/* {console.log('categoryList', category.data.res)} */}
           </div>
         </Card>
       </div>
