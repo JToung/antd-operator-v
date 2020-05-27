@@ -44,27 +44,26 @@ class ViewItem extends PureComponent {
 
     this.partitionColumns = [
       {
-        title: '单品分区ID',
-        dataIndex: '_id',
-        key: '_id',
-      },
-      {
         title: '单品分区名称',
         dataIndex: 'name',
         key: 'name',
+        align:'center',
       },
       {
         title: '单品分区价格',
         dataIndex: 'price',
         key: 'price',
+        align:'center',
       },
       {
         title: '单品应用场景',
         dataIndex: 'applicable',
         key: 'applicable',
+        align:'center',
       },
       {
         title: '操作',
+        align:'center',
         render: (text, record) =>
           this.state.partitions.length >= 1 ? (
             <div>

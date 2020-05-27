@@ -101,6 +101,9 @@ class View extends PureComponent {
       case 'j':
         return <font>接单</font>;
         break;
+      case 'f':
+        return <font>反馈</font>;
+        break;
     }
   };
 
@@ -190,7 +193,6 @@ class View extends PureComponent {
         break;
     }
   };
-
 
   render() {
     const { loading } = this.props;

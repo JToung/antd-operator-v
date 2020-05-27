@@ -3,7 +3,17 @@ import {
     queryPartition,
     queryAssign,
     assignPost,
-    queryLog
+    queryLog,
+    queryTotalWorkorder,
+    queryTotalWorkorderMonth,
+    queryBadWorkorderMonth,
+    queryBadWorkorder,
+    queryGoodWorkorderMonth,
+    queryPartitonRank,
+    queryTotalWorkorderYear,
+    queryBadWorkorderYear,
+    queryGoodWorkorderYear,
+    queryGoodWorkorder
   } from '@/services/api';
   
   export default {
@@ -63,6 +73,106 @@ import {
           payload: response,
         });
         console.log('queryLog', response);
+        return response;
+      },
+      *queryTotalWorkorder({ payload }, { call, put }) {
+        console.log('payload', payload);
+        const response = yield call(queryTotalWorkorder, payload);
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+        console.log('queryTotalWorkorder', response);
+        return response;
+      },
+      *queryTotalWorkorderMonth({ payload }, { call, put }) {
+        console.log('payload', payload);
+        const response = yield call(queryTotalWorkorderMonth, payload);
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+        console.log('queryTotalWorkorderMonth', response);
+        return response;
+      },
+      *queryBadWorkorderMonth({ payload }, { call, put }) {
+        console.log('payload', payload);
+        const response = yield call(queryBadWorkorderMonth, payload);
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+        console.log('queryBadWorkorderMonth', response);
+        return response;
+      },
+      *queryBadWorkorder({ payload }, { call, put }) {
+        console.log('payload', payload);
+        const response = yield call(queryBadWorkorder, payload);
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+        console.log('queryBadWorkorder', response);
+        return response;
+      },
+      *queryGoodWorkorderMonth({ payload }, { call, put }) {
+        console.log('payload', payload);
+        const response = yield call(queryGoodWorkorderMonth, payload);
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+        console.log('queryGoodWorkorderMonth', response);
+        return response;
+      },
+      *queryPartitonRank({ payload }, { call, put }) {
+        console.log('payload', payload);
+        const response = yield call(queryPartitonRank, payload);
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+        console.log('queryPartitonRank', response);
+        return response;
+      },
+      *queryTotalWorkorderYear({ payload }, { call, put }) {
+        console.log('payload', payload);
+        const response = yield call(queryTotalWorkorderYear, payload);
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+        console.log('queryTotalWorkorderYear', response);
+        return response;
+      },
+      *queryBadWorkorderYear({ payload }, { call, put }) {
+        console.log('payload', payload);
+        const response = yield call(queryBadWorkorderYear, payload);
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+        console.log('queryBadWorkorderYear', response);
+        return response;
+      },
+      *queryGoodWorkorderYear({ payload }, { call, put }) {
+        console.log('payload', payload);
+        const response = yield call(queryGoodWorkorderYear, payload);
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+        console.log('queryGoodWorkorderYear', response);
+        return response;
+      },
+      *queryGoodWorkorder({ payload }, { call, put }) {
+        console.log('payload', payload);
+        const response = yield call(queryGoodWorkorder, payload);
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+        console.log('queryGoodWorkorder', response);
         return response;
       },
     },

@@ -90,11 +90,7 @@ const ExamineForm = Form.create()(props => {
                     },
                   ],
                 })(
-                  <Input.TextArea
-                    style={{ minHeight: 32 }}
-                    placeholder="请输入审核理由"
-                    rows={4}
-                  />
+                  <Input.TextArea style={{ minHeight: 32 }} placeholder="请输入审核理由" rows={4} />
                 )}
               </Form.Item>
             </Col>
@@ -130,30 +126,33 @@ class TableList extends PureComponent {
 
   columns = [
     {
-      title: '申请表ID',
-      dataIndex: '_id',
-      key: '_id',
+      title: '专才姓名',
+      dataIndex: 'servicerName',
+      key: 'servicerName',
+      align:'center',
     },
     {
-      title: '专才id',
-      dataIndex: 'servicerId',
-      key: 'servicerId',
+      title: '申请项目名称',
+      dataIndex: 'itemName',
+      key: 'itemName',
     },
     {
       title: '审核申请时间',
       dataIndex: 'timestamp',
       key: 'timestamp',
+      align:'center',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '审核状态',
       dataIndex: 'state',
       key: 'state',
+      align:'center',
       render: val => <Badge status={statusMap[val]} text={status[val]} />,
     },
     {
       title: '操作',
-      width: 250,
+      align:'center',
       render: val => (
         <Fragment>
           {console.log('val', val)}
@@ -207,11 +206,29 @@ class TableList extends PureComponent {
       payload: payload,
     }).then(res => {
       console.log('res：', res);
+      const servicerE = res.findResult;
       if (res.status == '1') {
-        this.setState({ servicerE: res.findResult });
+        servicerE.map(E => {
+          const params1 = {
+            _id: E.servicerId,
+          };
+          dispatch({
+            type: 'servicer/queryServicer',
+            payload: params1,
+          }).then(res => {
+            console.log('res：', res);
+            if (res.findResult.length != 0) {
+              const servicerE1 = {
+                ...E,
+                servicerName: res.findResult[0].servicerName,
+              };
+              const { servicerE } = this.state;
+              this.setState({ servicerE: [...servicerE, servicerE1] });
+            }
+          });
+        });
       }
     });
-    console.log('servicerE:', this.state.servicerE);
   }
 
   /*
@@ -230,7 +247,8 @@ class TableList extends PureComponent {
         >
           <Descriptions bordered layout="vertical">
             <Descriptions.Item label="专才ID">{Contract.servicerId}</Descriptions.Item>
-            <Descriptions.Item label="项目名称">{Contract.itemName}</Descriptions.Item>
+            <Descriptions.Item label="专才姓名">{Contract.servicerName}</Descriptions.Item>
+            <Descriptions.Item label="申请项目名称">{Contract.itemName}</Descriptions.Item>
             <Descriptions.Item label="审核状态">
               <Badge status={statusMap[Contract.state]} text={status[Contract.state]} />
             </Descriptions.Item>
@@ -265,7 +283,6 @@ class TableList extends PureComponent {
     }
   };
 
-  
   //查看审核
   handleViewOk = e => {
     console.log(e);
@@ -305,7 +322,7 @@ class TableList extends PureComponent {
       console.log(res);
       if (res.status == '1') {
         this.setState({ servicerE: res.findResult });
-      }else{
+      } else {
         this.setState({ servicerE: [] });
       }
     });
@@ -401,7 +418,7 @@ class TableList extends PureComponent {
         console.log(res);
         if (res.status == '1') {
           this.setState({ servicerE: res.findResult });
-        }else{
+        } else {
           this.setState({ servicerE: [] });
         }
       });

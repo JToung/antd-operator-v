@@ -401,7 +401,7 @@ class Center extends PureComponent {
       <Card bordered={false}>
         <Descriptions title="专才基础信息管理" bordered loading={loading} layout="vertical">
           <Descriptions.Item label="专才ID">{servicer._id}</Descriptions.Item>
-          <Descriptions.Item label="专才名">{servicer.servicerName}</Descriptions.Item>
+          <Descriptions.Item label="专才姓名">{servicer.servicerName}</Descriptions.Item>
           <Descriptions.Item label="专才账号">{servicer.servicerZhanghao}</Descriptions.Item>
           <Descriptions.Item label="专才凭证">
             <img

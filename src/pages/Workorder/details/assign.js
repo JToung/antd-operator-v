@@ -58,33 +58,33 @@ class TableListAssign extends PureComponent {
 
   columns = [
     {
-      title: '专才ID',
-      dataIndex: '_id',
-      key: '_id',
-    },
-    {
       title: '专才名称',
       dataIndex: 'servicerName',
       key: 'servicerName',
+      align:'center',
     },
     {
       title: '专才电话',
       dataIndex: 'servicerPhone',
       key: 'servicerPhone',
+      align:'center',
     },
     {
       title: '专才邮箱',
       dataIndex: 'servicerEmail',
       key: 'servicerEmail',
+      align:'center',
     },
     {
       title: '专才入驻时间',
       dataIndex: 'servicerRegistrationDate',
       key: 'servicerRegistrationDate',
+      align:'center',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '操作',
+      align:'center',
       render: val => (
         <Fragment>
           {console.log('val', val)}

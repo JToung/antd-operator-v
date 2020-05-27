@@ -212,6 +212,7 @@ class Center extends PureComponent {
   };
 
   Out = () => {
+    const { dispatch } = this.props;
     dispatch({
       type: 'login/logout',
     });
@@ -229,7 +230,7 @@ class Center extends PureComponent {
     const { loading } = this.props;
     console.log('loading', loading);
     // console.log('operator.date',operator);
-    if (operator._id == null) {
+    if (operator == null) {
       return (
         // 加头部
         <Card bordered={false}>

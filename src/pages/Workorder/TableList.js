@@ -61,37 +61,42 @@ class TableListWorkorder extends PureComponent {
 
   columns = [
     {
-      title: '工单ID',
-      dataIndex: '_id',
-      key: '_id',
-    },
-    {
       title: '工单名称',
       dataIndex: 'name',
       key: 'name',
+      align:'center',
+      width: '20%',
     },
     {
       title: '工单启动时间',
       dataIndex: 'startTime',
       key: 'startTime',
+      width: '20%',
+      align:'center',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '服务启动时间',
       dataIndex: 'serverTime',
       key: 'serverTime',
+      width: '20%',
+      align:'center',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '工单状态',
       dataIndex: 'state',
       key: 'state',
+      width: '15%',
+      align:'center',
       render(val) {
         return <Badge color={statusMap[val]} text={status[val]} />;
       },
     },
     {
       title: '操作',
+      width: '25%',
+      align:'center',
       render: val => (
         <Fragment>
           {console.log('val', val)}

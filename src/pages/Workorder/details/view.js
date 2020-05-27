@@ -106,7 +106,7 @@ class ViewItem extends PureComponent {
                     {this.getImg(logTask)}
                   </Descriptions.Item>
                   <Descriptions.Item label="客户反馈" span={3}>
-                    {logTask.Customerfeedback}
+                    {logTask.customerfeedback}
                   </Descriptions.Item>
                 </Descriptions>
               </Modal>

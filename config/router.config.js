@@ -49,12 +49,18 @@ export default [
                 name: 'update',
                 component: './Operator/Center/Update',
               },
+              {
+                component: '404',
+              },
             ],
           },
           {
             path: '/operator/cashflow',
             name: 'cashflow',
             component: './Operator/Center/cashflow',
+          },
+          {
+            component: '404',
           },
         ],
       },
@@ -64,11 +70,11 @@ export default [
         name: 'category',
         icon: 'profile',
         routes: [
-          {
-            path: '/category/info',
-            name: 'info',
-            component: './Category/Category/analysis',
-          },
+          // {
+          //   path: '/category/info',
+          //   name: 'info',
+          //   component: './Category/Category/analysis',
+          // },
           {
             path: '/category/v',
             name: 'v',
@@ -109,7 +115,13 @@ export default [
                 name: 'uporoff-categroy',
                 component: './Category/Category/details/uporoff',
               },
+              {
+                component: '404',
+              },
             ],
+          },
+          {
+            component: '404',
           },
         ],
       },
@@ -118,11 +130,11 @@ export default [
         name: 'item',
         icon: 'profile',
         routes: [
-          {
-            path: '/item/info',
-            name: 'info',
-            component: './Item/analysis',
-          },
+          // {
+          //   path: '/item/info',
+          //   name: 'info',
+          //   component: './Item/analysis',
+          // },
           {
             path: '/item/v',
             name: 'v',
@@ -163,7 +175,13 @@ export default [
                 name: 'uporoff-item',
                 component: './Item/details/uporoff',
               },
+              {
+                component: '404',
+              },
             ],
+          },
+          {
+            component: '404',
           },
         ],
       },
@@ -202,7 +220,13 @@ export default [
                 name: 'assign-workorder',
                 component: './Workorder/details/assign',
               },
+              {
+                component: '404',
+              },
             ],
+          },
+          {
+            component: '404',
           },
         ],
       },
@@ -211,11 +235,11 @@ export default [
         name: 'servicer',
         icon: 'profile',
         routes: [
-          {
-            path: '/servicer/info',
-            name: 'info',
-            component: './Servicer/analysis',
-          },
+          // {
+          //   path: '/servicer/info',
+          //   name: 'info',
+          //   component: './Servicer/analysis',
+          // },
           {
             path: '/servicer/center',
             name: 'center',
@@ -236,6 +260,9 @@ export default [
                 name: 'view-servicer',
                 component: './Servicer/details/view',
               },
+              {
+                component: '404',
+              },
             ],
           },
           {
@@ -253,7 +280,13 @@ export default [
                 name: 'list',
                 component: './Servicer/examine/servicer-list',
               },
+              {
+                component: '404',
+              },
             ],
+          },
+          {
+            component: '404',
           },
         ],
       },
@@ -277,6 +310,9 @@ export default [
             path: '/messages/view/:_id',
             name: 'view',
             component: './Messages/details/view',
+          },
+          {
+            component: '404',
           },
         ],
       },

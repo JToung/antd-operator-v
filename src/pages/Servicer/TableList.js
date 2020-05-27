@@ -61,36 +61,36 @@ class TableList extends PureComponent {
 
   columns = [
     {
-      title: '专才ID',
-      dataIndex: '_id',
-      key: '_id',
-    },
-    {
-      title: '专才名称',
+      title: '专才姓名',
       dataIndex: 'servicerName',
       key: 'servicerName',
+      align:'center'
     },
     {
       title: '专才加入时间',
       dataIndex: 'servicerRegistrationDate',
       key: 'servicerRegistrationDate',
+      align:'center',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '专才联系方式',
       dataIndex: 'servicerPhone',
       key: 'servicerPhone',
+      align:'center',
     },
     {
       title: '专才状态',
       dataIndex: 'servicerStatus',
       key: 'servicerStatus',
+      align:'center',
       render: val => (
         this.getServicerStatus(val)
       ),
     },
     {
       title: '操作',
+      align:'center',
       render: val => (
         <Fragment>
           {console.log('val', val)}

@@ -113,26 +113,22 @@ class TableListItem extends PureComponent {
 
   columns = [
     {
-      title: '单品ID',
-      dataIndex: '_id',
-      key: '_id',
-    },
-    {
       title: '单品名称',
       dataIndex: 'itemName',
       key: 'itemName',
+      width: '20%',
     },
     {
       title: '单品简介',
       dataIndex: 'itemIntroduction',
       key: 'itemIntroduction',
-      width: 200,
+      width: '25%',
     },
     {
       title: '单品状态',
       dataIndex: 'itemState',
       key: 'itemState',
-      width: 120,
+      width: '10%',
       render(val) {
         return <Badge status={statusMap[val]} text={status[val]} />;
       },
@@ -141,6 +137,7 @@ class TableListItem extends PureComponent {
       title: '单品产生时间',
       dataIndex: 'itemAddTime',
       key: 'itemAddTime',
+      width: '20%',
       render: val => (
         <span>
           {moment(val)
@@ -151,7 +148,7 @@ class TableListItem extends PureComponent {
     },
     {
       title: '操作',
-      width: 200,
+      width: '25%',
       render: val => (
         <Fragment>
           {console.log('val', val)}

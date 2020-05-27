@@ -133,8 +133,10 @@ class OperatorHome extends Component {
       type: 'operator/querySaleMonth',
       payload: payload,
     }).then(res => {
+      console.log(res)
       this.setState({ SaleOneDay: res.todaySale, simpleRatioSale: res.simpleRatio });
     });
+    
     //本月成交量以及日比
     dispatch({
       type: 'operator/queryVolumeMonth',

@@ -22,6 +22,22 @@ class ItemHome extends Component {
     salesType: 'all',
     currentTabKey: '',
     rangePickerValue: getTimeDistance('year'),
+    //总额
+    workorderTotal: 0,
+    BadWorkorderTotal: 0,
+    GoodWorkorderTotal: 0,
+    //日增长率
+    simpleRatioTotal: 0,
+    simpleRatioBadTotal: 0,
+    simpleRatioGoodTotal: 0,
+    //日额
+    TotalOneDay: 0,
+    BadTotalOneDay: 0,
+    GoodTotalOneDay: 0,
+    //趋势图
+    Data: {},
+    //单品分区排行
+    PartitonRank: [],
   };
 
   componentDidMount() {
@@ -46,6 +62,25 @@ class ItemHome extends Component {
       dispatch({
         type: 'chart/fetch',
       });
+    });
+
+    const payload = {
+      id: localStorage.getItem('userId'),
+    };
+
+    //获取总工单数
+    dispatch({
+      type: 'workorder/queryTotalWorkorder',
+      payload: payload,
+    }).then(res => {
+      this.setState({ workorderTotal: res[0].count });
+    });
+    //成交额总量
+    dispatch({
+      type: 'workorder/queryVolume',
+      payload: payload,
+    }).then(res => {
+      this.setState({ Volume: res });
     });
   }
 
@@ -103,7 +138,26 @@ class ItemHome extends Component {
   };
 
   render() {
-    const { rangePickerValue, salesType, currentTabKey } = this.state;
+    const {
+      rangePickerValue,
+      salesType,
+      currentTabKey,
+      workorderTotal,
+      BadWorkorderTotal,
+      GoodWorkorderTotal,
+      //日增长率
+      simpleRatioTotal,
+      simpleRatioBadTotal,
+      simpleRatioGoodTotal,
+      //日额
+      TotalOneDay,
+      BadTotalOneDay,
+      GoodTotalOneDay,
+      //趋势图
+      Data,
+      //单品分区排行
+      PartitonRank,
+    } = this.state;
     const { chart, loading } = this.props;
     const {
       visitData,
@@ -142,7 +196,19 @@ class ItemHome extends Component {
     return (
       <GridContent>
         <Suspense fallback={<PageLoading />}>
-          <IntroduceRow loading={loading} visitData={visitData} />
+          <IntroduceRow
+            loading={loading}
+            visitData={visitData}
+            simpleRatioTotal={simpleRatioTotal}
+            simpleRatioBadTotal={simpleRatioBadTotal}
+            simpleRatioGoodTotal={simpleRatioGoodTotal}
+            workorderTotal={workorderTotal}
+            BadWorkorderTotal={BadWorkorderTotal}
+            GoodWorkorderTotal={GoodWorkorderTotal}
+            TotalOneDay={TotalOneDay}
+            BadTotalOneDay={BadTotalOneDay}
+            GoodTotalOneDay={GoodTotalOneDay}
+          />
         </Suspense>
         <Suspense fallback={null}>
           <SalesCard
@@ -152,13 +218,10 @@ class ItemHome extends Component {
             handleRangePickerChange={this.handleRangePickerChange}
             loading={loading}
             selectDate={this.selectDate}
+            Data={Data}
+            PartitonRank={PartitonRank}
           />
         </Suspense>
-        <div>
-            <Suspense fallback={null}>
-              <CashFlowCard />
-            </Suspense>
-        </div>
       </GridContent>
     );
   }

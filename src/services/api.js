@@ -4,6 +4,15 @@ import { OPERATOR_URL , platform_URL } from '../utils/Constants';
 import ajax from './ajax';
 
 
+//修改密码
+export async function changePsd(params) {
+  // console.log('setRead', params.id);
+  return request(`${OPERATOR_URL}/manager/changepsd?${stringify(params)}`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
 //获取现金流中已结束的流量表
 export async function queryCash01(params) {
   return request(`${platform_URL}/platform/querycash?state=1&state=0&operatorId=${params.id}`);
@@ -79,6 +88,61 @@ export async function queryDebtYear(params) {
 //运营商排行
 export async function queryServerRank(params) {
   return request(`${OPERATOR_URL}/manager/servicerRank?operatorId=${params.id}`);
+}
+
+//工单总数
+export async function queryTotalWorkorder(params) {
+  return request(`${OPERATOR_URL}/manager/totalworkorder?operatorId=${params.id}`);
+}
+
+//本年工单总数
+export async function queryTotalWorkorderYear(params) {
+  return request(`${OPERATOR_URL}/manager/workorderonyear?operatorId=${params.id}`);
+}
+
+//本月工单总数
+export async function queryTotalWorkorderMonth(params) {
+  return request(`${OPERATOR_URL}/manager/workorderonmonth?operatorId=${params.id}`);
+}
+
+//意外中止工单 本月
+export async function queryBadWorkorderMonth(params) {
+  return request(`${OPERATOR_URL}/manager/badworkorderonmonth?operatorId=${params.id}`);
+}
+
+//本年意外中止工单
+export async function queryBadWorkorderYear(params) {
+  return request(`${OPERATOR_URL}/manager/badworkorderonyear?operatorId=${params.id}`);
+}
+
+//意外中止工单总数
+export async function queryBadWorkorder(params) {
+  return request(`${OPERATOR_URL}/manager/badworkorder?operatorId=${params.id}`);
+}
+
+//顺利完成工单 - 本月
+export async function queryGoodWorkorderMonth(params) {
+  return request(`${OPERATOR_URL}/manager/goodworkorderonmonth?operatorId=${params.id}`);
+}
+
+//顺利完成工单总数
+export async function queryGoodWorkorder(params) {
+  return request(`${OPERATOR_URL}/manager/goodworkorder?operatorId=${params.id}`);
+}
+
+//本年顺利完成工单
+export async function queryGoodWorkorderYear(params) {
+  return request(`${OPERATOR_URL}/manager/goodworkorderonyear?operatorId=${params.id}`);
+}
+
+//单品分区排行
+export async function queryPartitonRank(params) {
+  return request(`${OPERATOR_URL}/manager/partitonRank?operatorId=${params.id}`);
+}
+
+//查看单品分区
+export async function queryPartiton(params) {
+  return request(`${OPERATOR_URL}/manager/querypartition?_id=${params.id}`);
 }
 
 //查询信息

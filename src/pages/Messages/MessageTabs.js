@@ -146,6 +146,8 @@ class MessageTabs extends PureComponent {
         break;
       case 'j':
         return <font>接单</font>;
+      case 'f':
+        return <font>反馈</font>;
         break;
     }
   };
@@ -154,28 +156,28 @@ class MessageTabs extends PureComponent {
   getDetailObject = val => {
     console.log('detailObject', val.detailObject);
     switch (val.detailObject) {
-      case "c":
+      case 'c':
         return <font>品类</font>;
         break;
-      case "t":
+      case 't':
         return <font>任务</font>;
         break;
-      case "o":
+      case 'o':
         return <font>运营商</font>;
         break;
-      case "z":
+      case 'z':
         return <font>专才</font>;
         break;
-      case "I":
+      case 'I':
         return <font>单品</font>;
         break;
-      case "log":
+      case 'log':
         return <font>工作日志</font>;
         break;
-      case "p":
+      case 'p':
         return <font>分区</font>;
         break;
-      case "g":
+      case 'g':
         return <font>工单</font>;
         break;
     }
@@ -191,7 +193,8 @@ class MessageTabs extends PureComponent {
         <List.Item key={item._id}>
           <div>
             {this.getObject(item)} {item.auditorName}于{' '}
-            {moment(item.timestamp).format('YYYY-MM-DD HH:mm:ss')} 对 {this.getDetailObject(item)}{item.detailObjectId}
+            {moment(item.timestamp).format('YYYY-MM-DD HH:mm:ss')} 对 {this.getDetailObject(item)}
+            {item.detailObjectId}
             执行{this.getAction(item)} 操作
             {this.getResult(item.result)}
             <div>

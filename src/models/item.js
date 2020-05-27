@@ -10,7 +10,8 @@ import {
   upPartition,
   upInterrupt,
   upTask,
-  changeItemState
+  changeItemState,
+  queryPartiton
 } from '@/services/api';
 
 export default {
@@ -142,7 +143,16 @@ export default {
       console.log('changeItemStateResponse', response);
       return response;
     },
-    
+    *queryPartiton({ payload }, { call, put }) {
+      console.log('queryPartiton', payload);
+      const response = yield call(queryPartiton, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      console.log('queryPartiton', response);
+      return response;
+    },
     // *uporoffCategory({ payload }, { call, put }) {
     //   console.log('uporoffCategoryPayload', payload);
     //   const response = yield call(uporoffCategory, payload);

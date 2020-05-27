@@ -18,7 +18,8 @@ import {
   queryDebt,
   queryDebtMonth,
   queryDebtYear,
-  queryServerRank
+  queryServerRank,
+  changePsd
 } from '@/services/api';
 
 export default {
@@ -228,6 +229,16 @@ export default {
         payload: response,
       });
       console.log('queryServerRank', response);
+      return response;
+    },
+    *changePsd({ payload }, { call, put }) {
+      console.log('payload', payload);
+      const response = yield call(changePsd, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      console.log('changePsd', response);
       return response;
     },
   },
