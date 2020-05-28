@@ -206,6 +206,14 @@ class MessageTabs extends PureComponent {
     }
   };
 
+  getL(data){
+    if(data != null){
+      return data.length;
+    }else{
+      return 0;
+    }
+  }
+
   render() {
     const { loading, dispatch } = this.props;
     const { messageListData0, messageListData1 } = this.state;
@@ -224,7 +232,7 @@ class MessageTabs extends PureComponent {
               pagination={{
                 showSizeChanger: true,
                 showQuickJumper: true,
-                total: messageListData0.length, // 数据总数
+                total: this.getL(messageListData0), // 数据总数
                 pageSize: 3, // 每页条数
                 showTotal: total => {
                   return `共 ${total} 条`;
@@ -241,7 +249,7 @@ class MessageTabs extends PureComponent {
               pagination={{
                 showSizeChanger: true,
                 showQuickJumper: true,
-                total: messageListData1.length, // 数据总数
+                total: this.getL(messageListData1), // 数据总数
                 pageSize: 3, // 每页条数
                 showTotal: total => {
                   return `共 ${total} 条`;
