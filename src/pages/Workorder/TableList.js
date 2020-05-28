@@ -64,7 +64,6 @@ class TableListWorkorder extends PureComponent {
       title: '工单名称',
       dataIndex: 'name',
       key: 'name',
-      align:'center',
       width: '20%',
     },
     {
