@@ -7,7 +7,7 @@ import Login from '@/components/Login';
 import styles from './Login.less';
 // import CreateCode from '@/utils/utils';
 import Promptbox from '@/components/PromptBox/index';
-import { RocketOutlined, UserOutlined, UnlockOutlined } from '@ant-design/icons';
+// import { RocketOutlined, UserOutlined, UnlockOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { routerRedux } from 'dva/router';
 
@@ -105,6 +105,8 @@ class LoginPage extends Component {
       form: { getFieldDecorator, getFieldError },
     } = this.props;
     const { type, autoLogin, code } = this.state;
+    // console.log('this.state.code.verify_image', code?.verify_image);
+    const verify_image = code.verify_image == undefined ? '' : code.verify_image;
     return (
       <div className={styles.main}>
         <Login
@@ -129,7 +131,7 @@ class LoginPage extends Component {
                     message: formatMessage({ id: 'validation.userName.required' }),
                   },
                 ],
-              })(<Input placeholder="请输入登录邮箱" size="large" prefix={<UserOutlined />} />)}
+              })(<Input placeholder="请输入登录邮箱" size="large" />)}
             </Form.Item>
             <Form.Item>
               {getFieldDecorator('password', {
@@ -140,9 +142,7 @@ class LoginPage extends Component {
                     message: formatMessage({ id: 'validation.password.required' }),
                   },
                 ],
-              })(
-                <Input.Password placeholder="请输入密码" size="large" prefix={<UnlockOutlined />} />
-              )}
+              })(<Input.Password placeholder="请输入密码" size="large" />)}
             </Form.Item>
             <Form.Item>
               <Row gutter={8}>
@@ -150,13 +150,15 @@ class LoginPage extends Component {
                   {getFieldDecorator('code', {
                     validateFirst: true,
                     rules: [{ required: true, message: '请输入验证码' }],
-                  })(<Input placeholder="验证码" size="large" prefix={<RocketOutlined />} />)}
+                  })(<Input placeholder="验证码" size="large" />)}
                 </Col>
                 <Col span={9}>
                   {/* 转HTML语言 */}
                   <div
                     onClick={this.onGetCaptcha}
-                    dangerouslySetInnerHTML={{ __html: this.state.code.verify_image }}
+                    dangerouslySetInnerHTML={{
+                      __html: verify_image,
+                    }}
                   />
                 </Col>
               </Row>
